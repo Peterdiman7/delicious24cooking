@@ -1,11 +1,17 @@
+<!-- App.vue -->
 <template>
-<div class="app-wrapper">
-    <RouterView class="page-layout" />
-</div>
+  <div class="app-wrapper">
+    <Header />
+    <main class="page-layout">
+      <RouterView />
+    </main>
+    <Footer />
+  </div>
 </template>
 
 <script setup lang="ts">
-import { RouterView } from "vue-router"
+import Header from "./components/Header.vue";
+import Footer from "./components/Footer.vue";
 </script>
 
 <style scoped>
@@ -22,11 +28,14 @@ html, body {
 
 .app-wrapper {
   min-height: 100vh;
-  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .page-layout {
+  flex: 1;
   width: 100%;
   min-height: 100vh;
+  padding: 2rem;
 }
 </style>

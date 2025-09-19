@@ -1,5 +1,7 @@
 import CategoriesView from "@/views/CategoriesView.vue"
-import DashboardView from "@/views/DashboardView.vue"
+import CategoryDetailsView from "@/views/CategoryDetailsView.vue"
+import HomeView from "@/views/HomeView.vue"
+import RecipeDetailsView from "@/views/RecipeDetailsView.vue"
 import { createRouter as createVueRouter, createWebHistory } from "vue-router"
 
 import type { RouteLocationNamedRaw } from "vue-router"
@@ -11,13 +13,23 @@ const createRouter = () => {
         routes: [
             {
                 path: "/",
-                name: "dashboard",
-                component: DashboardView,
+                name: "home",
+                component: HomeView,
             },
             {
                 path: "/categories",
                 name: "categories",
                 component: CategoriesView,
+            },
+            {
+                path: "/categories/:id",
+                name: "category-details",
+                component: CategoryDetailsView,
+            },
+            {
+                path: "/recipe/:id",
+                name: "recipe-detail",
+                component: RecipeDetailsView,
             },
         ],
     })
