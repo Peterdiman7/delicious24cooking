@@ -3,17 +3,37 @@
   <header class="site-header">
     <nav class="nav">
       <!-- Logo -->
-      <router-link to="/" class="logo">Delicious24Cooking</router-link>
+      <router-link to="/" class="logo" @click="closeMenu">
+        <span class="logo-icon">🍳</span>
+        <span class="logo-text">Delicious24Cooking</span>
+      </router-link>
 
-      <!-- Desktop Nav -->
+      <!-- Desktop / Mobile Nav -->
       <ul class="nav-links" :class="{ open: menuOpen }">
-        <li><router-link to="/" @click="closeMenu">Home</router-link></li>
-        <li><router-link to="/categories" @click="closeMenu">Categories</router-link></li>
-        <li><router-link to="/contact" @click="closeMenu">Contact</router-link></li>
+        <li>
+          <router-link to="/" @click="closeMenu" class="nav-link">
+            <span class="link-icon">🏠</span> Home
+          </router-link>
+        </li>
+        <li>
+          <router-link to="/categories" @click="closeMenu" class="nav-link">
+            <span class="link-icon">📚</span> Categories
+          </router-link>
+        </li>
+        <li>
+          <router-link to="/contacts" @click="closeMenu" class="nav-link">
+            <span class="link-icon">💬</span> Contact
+          </router-link>
+        </li>
       </ul>
 
       <!-- Hamburger Button -->
-      <button class="menu-toggle" @click="toggleMenu" aria-label="Toggle menu">
+      <button
+        class="menu-toggle"
+        @click="toggleMenu"
+        :aria-expanded="menuOpen.toString()"
+        aria-label="Toggle menu"
+      >
         <span :class="{ open: menuOpen }"></span>
         <span :class="{ open: menuOpen }"></span>
         <span :class="{ open: menuOpen }"></span>
@@ -23,83 +43,113 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted, onBeforeUnmount } from "vue";
 
 const menuOpen = ref(false);
 
 const toggleMenu = () => {
   menuOpen.value = !menuOpen.value;
+  document.body.style.overflow = menuOpen.value ? "hidden" : "";
 };
 
 const closeMenu = () => {
   menuOpen.value = false;
+  document.body.style.overflow = "";
 };
+
+// Close menu on window resize back to desktop
+const handleResize = () => {
+  if (window.innerWidth > 768) {
+    closeMenu();
+  }
+};
+
+onMounted(() => {
+  window.addEventListener("resize", handleResize);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", handleResize);
+});
 </script>
 
 <style scoped>
 /* ===== Header Layout ===== */
 .site-header {
   width: 100%;
-  background-color: #fff;
-  border-bottom: 1px solid #eee;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 107, 71, 0.1);
   padding: 1rem 2rem;
   position: sticky;
   top: 0;
   z-index: 200;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  overflow-x: hidden;
-  /* Prevent unwanted horizontal scroll */
+  box-shadow: var(--shadow-lg);
 }
 
 .nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 /* ===== Logo ===== */
 .logo {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
   font-weight: 700;
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   text-decoration: none;
-  color: #222;
-  transition: color 0.3s ease;
+  color: var(--charcoal);
+  transition: opacity var(--transition-normal);
 }
 
 .logo:hover {
-  color: #ff6347;
+  opacity: 0.85;
 }
 
-/* ===== Desktop Nav ===== */
+.logo-icon {
+  font-size: 2rem;
+}
+
+.logo-text {
+  font-family: "Quicksand", sans-serif;
+  font-weight: 700;
+}
+
+/* ===== Nav Links ===== */
 .nav-links {
   list-style: none;
   display: flex;
-  gap: 2rem;
-  transition: transform 0.3s ease;
+  gap: 1rem;
 }
 
-.nav-links a {
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
   text-decoration: none;
-  color: #333;
+  color: var(--dark-gray);
   font-weight: 500;
-  position: relative;
+  font-size: 1rem;
+  padding: 0.6rem 1rem;
+  border-radius: var(--radius-full);
+  transition: all var(--transition-normal);
 }
 
-.nav-links a::after {
-  content: "";
-  display: block;
-  height: 2px;
-  width: 0%;
-  background: #ff6347;
-  transition: width 0.3s ease;
-  position: absolute;
-  bottom: -4px;
-  left: 0;
+.nav-link:hover,
+.nav-link.router-link-active {
+  background: var(--gradient-primary);
+  color: white;
+  box-shadow: var(--shadow-md);
 }
 
-.nav-links a:hover::after {
-  width: 100%;
+.link-icon {
+  font-size: 1.1rem;
 }
 
 /* ===== Hamburger Button ===== */
@@ -108,27 +158,26 @@ const closeMenu = () => {
   flex-direction: column;
   justify-content: space-between;
   width: 28px;
-  height: 20px;
+  height: 22px;
   background: none;
   border: none;
   cursor: pointer;
   padding: 0;
   z-index: 300;
-  /* Above menu */
 }
 
 .menu-toggle span {
   display: block;
   height: 3px;
   width: 100%;
-  background: #333;
+  background: var(--primary-orange);
   border-radius: 2px;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);
 }
 
 /* Hamburger → X animation */
 .menu-toggle span.open:nth-child(1) {
-  transform: rotate(45deg) translateY(7px);
+  transform: rotate(45deg) translate(5px, 6px);
 }
 
 .menu-toggle span.open:nth-child(2) {
@@ -136,10 +185,10 @@ const closeMenu = () => {
 }
 
 .menu-toggle span.open:nth-child(3) {
-  transform: rotate(-45deg) translateY(-7px);
+  transform: rotate(-45deg) translate(6px, -6px);
 }
 
-/* ===== Mobile Nav ===== */
+/* ===== Mobile Styles ===== */
 @media (max-width: 768px) {
   .menu-toggle {
     display: flex;
@@ -147,17 +196,19 @@ const closeMenu = () => {
 
   .nav-links {
     position: fixed;
-    top: 64px;
-    /* Below header */
+    top: 0;
     right: 0;
     flex-direction: column;
-    background: #fff;
-    width: 240px;
-    height: calc(100vh - 64px);
-    padding: 2rem 1.5rem;
-    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+    align-items: flex-start;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(25px);
+    width: 80%;
+    max-width: 320px;
+    height: 100vh;
+    padding: 5rem 1.5rem 2rem;
+    box-shadow: var(--shadow-xl);
     transform: translateX(100%);
-    transition: transform 0.3s ease;
+    transition: transform var(--transition-normal);
   }
 
   .nav-links.open {
@@ -165,7 +216,26 @@ const closeMenu = () => {
   }
 
   .nav-links li {
-    margin-bottom: 1rem;
+    width: 100%;
+  }
+
+  .nav-link {
+    width: 100%;
+    justify-content: flex-start;
+    padding: 1rem 1.2rem;
+    border-radius: var(--radius-md);
+  }
+}
+
+/* Extra Small Devices */
+@media (max-width: 480px) {
+  .logo-text {
+    display: none;
+  }
+
+  .nav-links {
+    width: 100%;
+    max-width: none;
   }
 }
 </style>

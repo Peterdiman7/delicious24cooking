@@ -1,7 +1,12 @@
+import AboutView from "@/views/AboutView.vue"
 import CategoriesView from "@/views/CategoriesView.vue"
 import CategoryDetailsView from "@/views/CategoryDetailsView.vue"
+import ContactsView from "@/views/ContactsView.vue"
+import CookiesView from "@/views/CookiesView.vue"
 import HomeView from "@/views/HomeView.vue"
+import PrivacyPolicyView from "@/views/PrivacyPolicyView.vue"
 import RecipeDetailsView from "@/views/RecipeDetailsView.vue"
+import TermsConditionsView from "@/views/TermsConditionsView.vue"
 import { createRouter as createVueRouter, createWebHistory } from "vue-router"
 
 import type { RouteLocationNamedRaw } from "vue-router"
@@ -30,6 +35,31 @@ const createRouter = () => {
                 path: "/recipe/:id",
                 name: "recipe-detail",
                 component: RecipeDetailsView,
+            },
+            {
+                path: "/contacts",
+                name: "contacts",
+                component: ContactsView,
+            },
+            {
+                path: "/privacy-policy",
+                name: "privacy-policy",
+                component: PrivacyPolicyView,
+            },
+            {
+                path: "/terms-conditions",
+                name: "terms-conditions",
+                component: TermsConditionsView,
+            },
+            {
+                path: "/about",
+                name: "about",
+                component: AboutView,
+            },
+            {
+                path: "/cookies",
+                name: "cookies",
+                component: CookiesView,
             },
         ],
     })

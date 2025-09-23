@@ -73,56 +73,101 @@ interface Recipe {
 }
 
 const router = useRouter();
-const topRated = ref<Recipe[]>([]);
-const latest = ref<Recipe[]>([]);
+const topRated = ref<Recipe[]>([])
+const latest = ref<Recipe[]>([])
 
+const sampleData: Recipe[] = [
+  {
+    id: 1,
+    name: "Classic Spaghetti Carbonara",
+    main_image: "https://cdn.sanity.io/images/cq7w2e71/production/08ae0b8293235129bbe7d55a3f89c2fc4f1a36d7-973x1300.jpg",
+    rating: "4.8",
+    date_published: "2025-09-15",
+  },
+  {
+    id: 2,
+    name: "Avocado Toast with Egg",
+    main_image: "https://feelgoodfoodie.net/wp-content/uploads/2025/05/Avocado-Toast-10.jpg",
+    rating: "4.5",
+    date_published: "2025-09-20",
+  },
+  {
+    id: 3,
+    name: "Thai Green Curry",
+    main_image: "https://munchingwithmariyah.com/wp-content/uploads/2025/03/IMG_4915.jpg",
+    rating: "4.9",
+    date_published: "2025-09-18",
+  },
+  {
+    id: 4,
+    name: "Blueberry Pancakes",
+    main_image: "https://www.allrecipes.com/thmb/ecb0XKvcrE7OyxBLX3OVEd30TbE=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/686460-todds-famous-blueberry-pancakes-Dianne-1x1-1-9bd040b975634bce884847ce2090de16.jpg",
+    rating: "4.7",
+    date_published: "2025-09-22",
+  },
+  {
+    id: 5,
+    name: "Grilled Salmon with Lemon Butter",
+    main_image: "https://www.lecremedelacrumb.com/wp-content/uploads/2022/07/grilled-lemon-butter-salmon-9sm-6.jpg",
+    rating: "4.6",
+    date_published: "2025-09-10",
+  },
+  {
+    id: 6,
+    name: "Vegan Buddha Bowl",
+    main_image: "https://simplyceecee.co/wp-content/uploads/2018/07/veganbuddhabowl-2.jpg",
+    rating: "4.4",
+    date_published: "2025-09-12",
+  },
+  {
+    id: 7,
+    name: "Chocolate Lava Cake",
+    main_image: "https://www.melskitchencafe.com/wp-content/uploads/2023/01/updated-lava-cakes7.jpg",
+    rating: "5.0",
+    date_published: "2025-09-21",
+  },
+];
+
+// Load sample data
 onMounted(() => {
-  async function fetchRecipes() {
-    try {
-      const response = await fetch("http://localhost:3000/recipes");
-      const data: Recipe[] = await response.json();
+  // Top rated recipes
+  topRated.value = [...sampleData]
+    .sort((a, b) => Number(b.rating) - Number(a.rating))
+    .slice(0, 6);
 
-      // Top rated recipes
-      topRated.value = data
-        .filter(r => Number(r.rating) > 0)
-        .sort((a, b) => Number(b.rating) - Number(a.rating))
-        .slice(0, 6);
-
-      // Latest published recipes
-      latest.value = data
-        .sort((a, b) => new Date(b.date_published).getTime() - new Date(a.date_published).getTime())
-        .slice(0, 6);
-    } catch (err) {
-      console.error("Failed to fetch recipes:", err);
-    }
-  }
-
-  fetchRecipes();
+  // Latest published recipes
+  latest.value = [...sampleData]
+    .sort(
+      (a, b) =>
+        new Date(b.date_published).getTime() -
+        new Date(a.date_published).getTime()
+    )
+    .slice(0, 6);
 });
 
-// Helper functions
+// Helpers
 const handleImageError = (event: Event) => {
   const img = event.target as HTMLImageElement;
-  img.src = 'https://via.placeholder.com/300x200?text=No+Image';
+  img.src = "https://via.placeholder.com/300x200?text=No+Image";
 };
 
 const generateStars = (rating: number): string => {
   const fullStars = Math.floor(rating);
   const hasHalfStar = rating % 1 >= 0.5;
-  return '★'.repeat(fullStars) + (hasHalfStar ? '☆' : '');
+  return "★".repeat(fullStars) + (hasHalfStar ? "☆" : "");
 };
 
 const formatDate = (dateString: string): string => {
-  return new Date(dateString).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric'
+  return new Date(dateString).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
   });
 };
 
 const goToRecipe = (recipeId: number) => {
   router.push(`/recipe/${recipeId}`);
-};
+}
 </script>
 
 <style scoped>
