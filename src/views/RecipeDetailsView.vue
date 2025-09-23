@@ -110,83 +110,34 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from "vue";
+import { ref, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
-
-interface Recipe {
-  id: number;
-  name: string;
-  description?: string;
-  main_image: string;
-  rating?: string;
-  prep_time?: number;
-  cook_time?: number;
-  total_time?: number;
-}
-
-interface Ingredient {
-  id: number;
-  ingredient: string;
-}
-
-interface Direction {
-  id: number;
-  instruction: string;
-}
-
-interface Nutrition {
-  calories?: string;
-  fat?: string;
-  saturated_fat?: string;
-  unsaturated_fat?: string;
-  carbs?: string;
-  fiber?: string;
-  sugar?: string;
-  cholesterol?: string;
-  protein?: string;
-  sodium?: string;
-}
+import { recipes } from "../services/recipes";
+import { ingredientsData, directionsData, nutritionData } from "../services/recipeDetails";
 
 const route = useRoute();
 const router = useRouter();
 const recipeId = Number(route.params.id);
 
-const recipe = ref<Recipe>({ id: 0, name: "", main_image: "" });
-const ingredients = ref<Ingredient[]>([]);
-const directions = ref<Direction[]>([]);
-const nutrition = ref<Nutrition | null>(null);
+// Get recipe from local data
+const recipe = ref(recipes.find(r => r.id === recipeId) || { id: 0, name: '', main_image: '' });
+
+// Filter ingredients, directions, nutrition for this recipe
+const ingredients = ref(
+  ingredientsData.filter(i => i.recipe_id === recipeId)
+);
+
+const directions = ref(
+  directionsData.filter(d => d.recipe_id === recipeId)
+);
+
+const nutrition = ref(
+  nutritionData.find(n => n.recipe_id === recipeId) || null
+);
 
 const hasNutritionData = computed(() => {
   if (!nutrition.value) return false;
-  return Object.values(nutrition.value).some(value => value && value !== '0');
-});
-
-onMounted(() => {
-  async function fetchRecipe() {
-    try {
-      // Recipe info
-      const resp = await fetch(`http://localhost:3000/recipes/${recipeId}`);
-      const data = await resp.json();
-      recipe.value = data;
-
-      // Ingredients
-      const ingResp = await fetch(`http://localhost:3000/recipes/${recipeId}/ingredients`);
-      ingredients.value = await ingResp.json();
-
-      // Directions
-      const dirResp = await fetch(`http://localhost:3000/recipes/${recipeId}/directions`);
-      directions.value = await dirResp.json();
-
-      // Nutrition
-      const nutResp = await fetch(`http://localhost:3000/recipes/${recipeId}/nutrition`);
-      const nutData = await nutResp.json();
-      nutrition.value = nutData && Object.keys(nutData).length ? nutData : null;
-    } catch (err) {
-      console.error("Failed to fetch recipe details:", err);
-    }
-  }
-
-  fetchRecipe();
+  return Object.values(nutrition.value).some(v => v && v !== '0');
 });
 
 function goBack() {

@@ -1,4 +1,3 @@
-<!-- src/views/CategoryDetailsView.vue -->
 <template>
   <div class="category-detail-page">
     <div class="category-header">
@@ -42,13 +41,8 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-
-interface Recipe {
-  id: number;
-  name: string;
-  main_image: string;
-  rating: string;
-}
+import { recipes as allRecipes, type Recipe } from "../services/recipes";
+import { categories } from "../services/categories"
 
 const route = useRoute();
 const router = useRouter();
@@ -59,23 +53,15 @@ const categoryDescription = ref("");
 const recipes = ref<Recipe[]>([]);
 
 onMounted(() => {
-  async function fetchCategory() {
-    try {
-      // Fetch category info (name, description)
-      const catResp = await fetch(`http://localhost:3000/categories/${categoryId}`);
-      const catData = await catResp.json();
-      categoryName.value = catData.name;
-      categoryDescription.value = catData.description;
-
-      // Fetch recipes for this category
-      const resp = await fetch(`http://localhost:3000/categories/${categoryId}/recipes`);
-      recipes.value = await resp.json();
-    } catch (err) {
-      console.error("Failed to fetch category or recipes:", err);
-    }
+  // Find category from local data
+  const category = categories.find(c => c.id === categoryId);
+  if (category) {
+    categoryName.value = category.name;
+    categoryDescription.value = category.description || "";
   }
 
-  fetchCategory();
+  // Filter recipes for this category
+  recipes.value = allRecipes.filter(r => r.category_id === categoryId);
 });
 
 function goToRecipe(recipeId: number) {
