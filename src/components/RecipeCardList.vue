@@ -7,7 +7,6 @@
         <img 
           :src="recipe.main_image" 
           :alt="recipe.name || 'Recipe Image'"
-          @error="handleImageError"
         />
       </div>
       <p>Rating: {{ recipe.rating }}</p>
@@ -23,13 +22,7 @@ interface Recipe {
   rating: string;
 }
 
-defineProps<{ recipes: Recipe[] }>();
-
-// Handle image loading errors
-const handleImageError = (event: Event) => {
-  const img = event.target as HTMLImageElement;
-  img.src = 'https://via.placeholder.com/300x200?text=No+Image';
-};
+defineProps<{ recipes: Recipe[] }>()
 </script>
 
 <style scoped>

@@ -8,18 +8,9 @@
     <section class="section">
       <h2>Top Rated Recipes</h2>
       <div class="recipe-grid">
-        <div 
-          v-for="recipe in topRated" 
-          :key="recipe.id" 
-          class="recipe-card"
-          @click="goToRecipe(recipe.id)"
-        >
+        <div v-for="recipe in topRated" :key="recipe.id" class="recipe-card" @click="goToRecipe(recipe.id)">
           <div class="image-container">
-            <img 
-              :src="recipe.main_image" 
-              :alt="recipe.name || 'Recipe Image'"
-              @error="handleImageError"
-            />
+            <img :src="recipe.main_image" :alt="recipe.name || 'Recipe Image'" />
           </div>
           <div class="card-content">
             <h3>{{ recipe.name || 'Recipe #' + recipe.id }}</h3>
@@ -35,18 +26,9 @@
     <section class="section">
       <h2>Recently Published Recipes</h2>
       <div class="recipe-grid">
-        <div 
-          v-for="recipe in latest" 
-          :key="recipe.id" 
-          class="recipe-card"
-          @click="goToRecipe(recipe.id)"
-        >
+        <div v-for="recipe in latest" :key="recipe.id" class="recipe-card" @click="goToRecipe(recipe.id)">
           <div class="image-container">
-            <img 
-              :src="recipe.main_image" 
-              :alt="recipe.name || 'Recipe Image'"
-              @error="handleImageError"
-            />
+            <img :src="recipe.main_image" :alt="recipe.name || 'Recipe Image'" />
           </div>
           <div class="card-content">
             <h3>{{ recipe.name || 'Recipe #' + recipe.id }}</h3>
@@ -79,54 +61,75 @@ const latest = ref<Recipe[]>([])
 const sampleData: Recipe[] = [
   {
     id: 1,
-    name: "Classic Spaghetti Carbonara",
-    main_image: "https://cdn.sanity.io/images/cq7w2e71/production/08ae0b8293235129bbe7d55a3f89c2fc4f1a36d7-973x1300.jpg",
+    name: 'Bruschetta',
+    main_image: 'https://images.unsplash.com/photo-1572695157366-5e585ab2b69f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
     rating: "4.8",
     date_published: "2025-09-15",
   },
   {
     id: 2,
-    name: "Avocado Toast with Egg",
-    main_image: "https://feelgoodfoodie.net/wp-content/uploads/2025/05/Avocado-Toast-10.jpg",
+    name: 'Stuffed Mushrooms',
+    main_image: 'https://cdn.apartmenttherapy.info/image/upload/f_jpg,q_auto:eco,c_fill,g_auto,w_1500,ar_1:1/k%2FPhoto%2FRecipes%2F2024-10-stuffed-mushrooms%2Fstuffed-mushrooms-318',
     rating: "4.5",
     date_published: "2025-09-20",
   },
   {
     id: 3,
-    name: "Thai Green Curry",
-    main_image: "https://munchingwithmariyah.com/wp-content/uploads/2025/03/IMG_4915.jpg",
+    name: 'Caprese Skewers',
+    main_image: 'https://images.unsplash.com/photo-1592417817098-8fd3d9eb14a5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
     rating: "4.9",
     date_published: "2025-09-18",
   },
   {
     id: 4,
-    name: "Blueberry Pancakes",
-    main_image: "https://www.allrecipes.com/thmb/ecb0XKvcrE7OyxBLX3OVEd30TbE=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/686460-todds-famous-blueberry-pancakes-Dianne-1x1-1-9bd040b975634bce884847ce2090de16.jpg",
+    name: 'Lemonade',
+    main_image: 'https://i2.wp.com/lmld.org/wp-content/uploads/2022/04/Lemonade-4.jpg',
     rating: "4.7",
     date_published: "2025-09-22",
   },
   {
     id: 5,
-    name: "Grilled Salmon with Lemon Butter",
-    main_image: "https://www.lecremedelacrumb.com/wp-content/uploads/2022/07/grilled-lemon-butter-salmon-9sm-6.jpg",
+    name: 'Red Potato Salad',
+    main_image: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
     rating: "4.6",
     date_published: "2025-09-10",
   },
   {
-    id: 6,
-    name: "Vegan Buddha Bowl",
-    main_image: "https://simplyceecee.co/wp-content/uploads/2018/07/veganbuddhabowl-2.jpg",
-    rating: "4.4",
-    date_published: "2025-09-12",
-  },
-  {
     id: 7,
-    name: "Chocolate Lava Cake",
-    main_image: "https://www.melskitchencafe.com/wp-content/uploads/2023/01/updated-lava-cakes7.jpg",
+    name: 'Jalapeño Limeade',
+    main_image: 'https://jerryjamesstone.com/wp-content/uploads/2020/01/Jalapeno-Lemonade-with-Garnish-3.jpg',
     rating: "5.0",
     date_published: "2025-09-21",
   },
-];
+  {
+    id: 39,
+    name: 'Summer Corn Salad',
+    main_image: 'https://www.spendwithpennies.com/wp-content/uploads/2023/06/Fresh-Corn-Salad-SpendWithPennies-5.jpg',
+    rating: '4.4',
+    date_published: "2025-09-21",
+  },
+  {
+    id: 47,
+    name: 'Mexican Corn Salad',
+    main_image: 'https://www.jocooks.com/wp-content/uploads/2019/05/mexican-street-corn-salad-1-12.jpg',
+    rating: '4.5',
+    date_published: "2025-09-20",
+  },
+  {
+    id: 58,
+    name: 'Greek Salad',
+    main_image: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
+    rating: '4.5',
+    date_published: "2025-09-19",
+  },
+  {
+    id: 59,
+    name: 'Cobb Salad',
+    main_image: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
+    rating: '4.4',
+    date_published: "2025-08-21",
+  },
+]
 
 // Load sample data
 onMounted(() => {
@@ -142,14 +145,8 @@ onMounted(() => {
         new Date(b.date_published).getTime() -
         new Date(a.date_published).getTime()
     )
-    .slice(0, 6);
-});
-
-// Helpers
-const handleImageError = (event: Event) => {
-  const img = event.target as HTMLImageElement;
-  img.src = "https://via.placeholder.com/300x200?text=No+Image";
-};
+    .slice(0, 6)
+})
 
 const generateStars = (rating: number): string => {
   const fullStars = Math.floor(rating);
@@ -282,15 +279,15 @@ const goToRecipe = (recipeId: number) => {
   .home-page {
     padding: 1rem;
   }
-  
+
   .hero-section h1 {
     font-size: 2rem;
   }
-  
+
   .section h2 {
     font-size: 1.5rem;
   }
-  
+
   .recipe-grid {
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 1rem;

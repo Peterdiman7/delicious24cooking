@@ -9,8 +9,8 @@
       <div class="content">
         <h3>1. About Us</h3>
         <p>
-          Delicious24Cooking is operated by <strong>Nexera Media Group LTD</strong>.  
-          We provide cooking inspiration, recipes, and food-related content to our community.  
+          Delicious24Cooking is operated by <strong>Nexera Media Group LTD</strong>.
+          We provide cooking inspiration, recipes, and food-related content to our community.
           Contact us anytime at <a href="mailto:legal@delicious24cooking.com">legal@delicious24cooking.com</a>.
         </p>
 
@@ -28,7 +28,7 @@
 
         <h3>4. Accounts & Eligibility</h3>
         <p>
-          To access certain features, you must create an account. You agree to:  
+          To access certain features, you must create an account. You agree to:
         </p>
         <ul>
           <li>Provide accurate and up-to-date information</li>
@@ -60,7 +60,7 @@
 
         <h3>8. Disclaimers</h3>
         <p>
-          All recipes and nutritional details are shared “as is.”  
+          All recipes and nutritional details are shared “as is.”
           Delicious24Cooking is not responsible for cooking results,
           allergies, or dietary issues that may arise from following our content.
         </p>
@@ -84,11 +84,39 @@
 <script setup lang="ts"></script>
 
 <style scoped>
-.page { padding: 3rem 1.5rem; }
-.container { max-width: 800px; margin: 0 auto; }
-.page-title { font-size: 2rem; font-weight: 700; margin-bottom: 1rem; }
-.page-intro { margin-bottom: 2rem; color: #555; }
-.content h3 { margin-top: 1.5rem; font-weight: 600; }
-.content p, .content ul { color: #444; margin: 0.5rem 0 1rem; }
-.content ul { list-style: disc; padding-left: 1.5rem; }
+.page {
+  padding: 3rem 1.5rem;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.page-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.page-intro {
+  margin-bottom: 2rem;
+  color: #555;
+}
+
+.content h3 {
+  margin-top: 1.5rem;
+  font-weight: 600;
+}
+
+.content p,
+.content ul {
+  color: #444;
+  margin: 0.5rem 0 1rem;
+}
+
+.content ul {
+  list-style: disc;
+  padding-left: 1.5rem;
+}
 </style>

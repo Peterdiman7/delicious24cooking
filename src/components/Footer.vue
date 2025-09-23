@@ -14,12 +14,6 @@
             Discover amazing recipes from around the world. From quick weekday meals to impressive dinner party dishes,
             we've got you covered.
           </p>
-          <div class="social-links">
-            <a href="#" class="social-link facebook" aria-label="Facebook">📘</a>
-            <a href="#" class="social-link twitter" aria-label="Twitter">🐦</a>
-            <a href="#" class="social-link instagram" aria-label="Instagram">📷</a>
-            <a href="#" class="social-link youtube" aria-label="YouTube">📹</a>
-          </div>
         </div>
 
         <!-- Quick Links -->
@@ -33,19 +27,6 @@
             <li><router-link to="/contacts" class="footer-link">Contact</router-link></li>
           </ul>
         </div>
-
-        <!-- Recipe Categories -->
-        <div class="footer-section">
-          <h3 class="footer-title">Popular Categories</h3>
-          <ul class="footer-links">
-            <li><a href="#" class="footer-link">Breakfast</a></li>
-            <li><a href="#" class="footer-link">Lunch</a></li>
-            <li><a href="#" class="footer-link">Dinner</a></li>
-            <li><a href="#" class="footer-link">Desserts</a></li>
-            <li><a href="#" class="footer-link">Healthy Options</a></li>
-          </ul>
-        </div>
-
         <!-- Newsletter -->
         <div class="footer-section">
           <h3 class="footer-title">Stay Updated</h3>

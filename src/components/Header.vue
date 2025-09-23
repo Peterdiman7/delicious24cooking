@@ -25,15 +25,39 @@
             <span class="link-icon">💬</span> Contact
           </router-link>
         </li>
+        <!-- New Buttons -->
+        <li>
+          <router-link to="/terms-conditions" @click="closeMenu" class="nav-link">
+            <span class="link-icon">📄</span> Terms
+          </router-link>
+        </li>
+        <li>
+          <router-link to="/privacy-policy" @click="closeMenu" class="nav-link">
+            <span class="link-icon">🔒</span> Privacy Policy
+          </router-link>
+        </li>
+        <li>
+          <router-link to="/payment-plans" @click="closeMenu" class="nav-link">
+            <span class="link-icon">💪</span> Plans
+          </router-link>
+        </li>
+
+        <!-- Login / Logout -->
+        <li v-if="!loggedIn">
+          <router-link to="/login" @click="closeMenu" class="nav-link">
+            <span class="link-icon">🔑</span> Login
+          </router-link>
+        </li>
+        <li v-else>
+          <button class="nav-link logout-btn" @click="logout">
+            <span class="link-icon">🚪</span> Logout
+          </button>
+        </li>
       </ul>
 
+
       <!-- Hamburger Button -->
-      <button
-        class="menu-toggle"
-        @click="toggleMenu"
-        :aria-expanded="menuOpen.toString()"
-        aria-label="Toggle menu"
-      >
+      <button class="menu-toggle" @click="toggleMenu" :aria-expanded="menuOpen.toString()" aria-label="Toggle menu">
         <span :class="{ open: menuOpen }"></span>
         <span :class="{ open: menuOpen }"></span>
         <span :class="{ open: menuOpen }"></span>
@@ -43,35 +67,55 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from "vue";
+import { ref, onMounted, onBeforeUnmount } from "vue"
+import { useRouter } from "vue-router"
 
-const menuOpen = ref(false);
+const router = useRouter()
+
+const menuOpen = ref(false)
+// make it reactive with ref
+const loggedIn = ref(sessionStorage.getItem("loggedIn") === "true")
 
 const toggleMenu = () => {
-  menuOpen.value = !menuOpen.value;
-  document.body.style.overflow = menuOpen.value ? "hidden" : "";
-};
+  menuOpen.value = !menuOpen.value
+  document.body.style.overflow = menuOpen.value ? "hidden" : ""
+}
 
 const closeMenu = () => {
-  menuOpen.value = false;
-  document.body.style.overflow = "";
-};
+  menuOpen.value = false
+  document.body.style.overflow = ""
+}
 
-// Close menu on window resize back to desktop
 const handleResize = () => {
   if (window.innerWidth > 768) {
-    closeMenu();
+    closeMenu()
   }
-};
+}
 
 onMounted(() => {
-  window.addEventListener("resize", handleResize);
-});
+  window.addEventListener("resize", handleResize)
+  // keep in sync across tabs
+  window.addEventListener("storage", syncLoginState)
+})
 
 onBeforeUnmount(() => {
-  window.removeEventListener("resize", handleResize);
-});
+  window.removeEventListener("resize", handleResize)
+  window.removeEventListener("storage", syncLoginState)
+})
+
+// logout handler
+const logout = () => {
+  sessionStorage.removeItem("loggedIn")
+  loggedIn.value = false
+  router.push("/login")
+}
+
+// helper to sync state across tabs
+const syncLoginState = () => {
+  loggedIn.value = sessionStorage.getItem("loggedIn") === "true"
+}
 </script>
+
 
 <style scoped>
 /* ===== Header Layout ===== */
@@ -189,7 +233,7 @@ onBeforeUnmount(() => {
 }
 
 /* ===== Mobile Styles ===== */
-@media (max-width: 768px) {
+@media (max-width: 1078px) {
   .menu-toggle {
     display: flex;
   }

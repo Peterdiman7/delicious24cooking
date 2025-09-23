@@ -19,7 +19,6 @@
           <img 
             :src="recipe.main_image" 
             :alt="recipe.name || 'Recipe Image'"
-            @error="handleImageError"
           />
         </div>
         <div class="card-content">
@@ -69,19 +68,14 @@ function goToRecipe(recipeId: number) {
 }
 
 function goBack() {
-  router.push('/categories');
+  router.push('/categories')
 }
 
-const handleImageError = (event: Event) => {
-  const img = event.target as HTMLImageElement;
-  img.src = 'https://via.placeholder.com/300x200?text=No+Image';
-};
-
 const generateStars = (rating: number): string => {
-  const fullStars = Math.floor(rating);
-  const hasHalfStar = rating % 1 >= 0.5;
-  return '★'.repeat(fullStars) + (hasHalfStar ? '☆' : '');
-};
+  const fullStars = Math.floor(rating)
+  const hasHalfStar = rating % 1 >= 0.5
+  return '★'.repeat(fullStars) + (hasHalfStar ? '☆' : '')
+}
 </script>
 
 <style scoped>

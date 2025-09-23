@@ -372,17 +372,6 @@ export const recipes: Recipe[] = [
     description: "Comforting Jewish-style chicken soup with fluffy matzo balls"
   },
   {
-    id: 22,
-    name: "Summer Watermelon Gazpacho",
-    main_image: "https://cook-it.club/DATA/Recipe/summer-watermelon-gazpacho-8403764-0.jpg",
-    rating: "4.7",
-    date_published: "2025-09-17",
-    category_id: 18,
-    description: "Refreshing cold soup perfect for hot summer days"
-  },
-
-  // Side Dish (category_id: 3)
-  {
     id: 23,
     name: "Garlic Roasted Brussels Sprouts",
     main_image: "https://images.unsplash.com/photo-1570197788417-0e82375c9371?w=400",

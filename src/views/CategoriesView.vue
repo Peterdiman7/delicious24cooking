@@ -9,7 +9,7 @@
     <div class="category-grid">
       <div v-for="category in categories" :key="category.id" class="category-card" @click="goToCategory(category.id)">
         <div class="image-container">
-          <img :src="category.image_url" :alt="category.name" @error="handleImageError" />
+          <img :src="category.image_url" :alt="category.name" />
         </div>
         <div class="card-content">
           <h3>{{ category.name }}</h3>
@@ -40,13 +40,8 @@ const router = useRouter();
 
 
 function goToCategory(categoryId: number) {
-  router.push(`/categories/${categoryId}`);
+  router.push(`/categories/${categoryId}`)
 }
-
-const handleImageError = (event: Event) => {
-  const img = event.target as HTMLImageElement;
-  img.src = 'https://via.placeholder.com/300x200?text=Category';
-};
 </script>
 
 <style scoped>
