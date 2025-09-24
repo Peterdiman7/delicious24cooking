@@ -27,16 +27,17 @@
   </div>
 </template>
 
-
 <script setup lang="ts">
 import { ref } from "vue"
 import { useRouter } from "vue-router"
+import { useAuthStore } from "@/stores/auth"
 
 const username = ref("")
 const password = ref("")
 const error = ref("")
 const success = ref("")
 const router = useRouter()
+const authStore = useAuthStore()
 
 const login = async () => {
   error.value = ""
@@ -62,7 +63,8 @@ const login = async () => {
 
     success.value = data.message || "Login successful"
 
-    // Redirect to home page after successful login
+    await authStore.checkLogin()
+
     setTimeout(() => {
       router.push("/")
     }, 1000)

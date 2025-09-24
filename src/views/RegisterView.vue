@@ -19,6 +19,12 @@
             </form>
             <p v-if="success" class="success">{{ success }}</p>
             <p v-if="error" class="error">{{ error }}</p>
+
+            <!-- Login link -->
+            <p class="login-link">
+                Already have an account?
+                <router-link to="/login">Login here</router-link>
+            </p>
         </div>
     </div>
 </template>
@@ -26,6 +32,7 @@
 <script setup lang="ts">
 import { ref } from "vue"
 import { useRouter } from "vue-router"
+import { useAuthStore } from "@/stores/auth"
 
 const username = ref("")
 const email = ref("")
@@ -33,6 +40,7 @@ const password = ref("")
 const error = ref("")
 const success = ref("")
 const router = useRouter()
+const authStore = useAuthStore()
 
 const register = async () => {
     error.value = ""
@@ -61,7 +69,14 @@ const register = async () => {
 
         success.value = data.message || "Registered successfully!"
 
-        // Optionally, redirect to login page
+        // If your backend automatically logs in after registration, update the auth store
+        // Otherwise, just redirect to login
+
+        // Option 1: If backend auto-logs in after registration
+        // await authStore.checkLogin()
+        // router.push("/")
+
+        // Option 2: Redirect to login page (current behavior)
         setTimeout(() => {
             router.push("/login")
         }, 1500)
@@ -126,5 +141,22 @@ input {
 .error {
     color: red;
     margin-top: 1rem;
+}
+
+.login-link {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: #555;
+    text-align: center;
+}
+
+.login-link a {
+    color: #14b8a6;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
 }
 </style>
