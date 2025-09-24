@@ -210,7 +210,7 @@ onMounted(() => {
 }
 
 /* ===== Mobile Styles ===== */
-@media (max-width: 1078px) {
+@media (max-width: 1278px) {
   .menu-toggle {
     display: flex;
   }
