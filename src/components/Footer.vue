@@ -22,7 +22,6 @@
           <ul class="footer-links">
             <li><router-link to="/" class="footer-link">Home</router-link></li>
             <li><router-link to="/categories" class="footer-link">Categories</router-link></li>
-            <li><router-link to="/recipes" class="footer-link">All Recipes</router-link></li>
             <li><router-link to="/about" class="footer-link">About Us</router-link></li>
             <li><router-link to="/contacts" class="footer-link">Contact</router-link></li>
           </ul>

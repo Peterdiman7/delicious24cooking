@@ -1,199 +1,127 @@
-import express from 'express'
-import mysql from 'mysql2/promise'
-import cors from 'cors'
-import path from 'path'
+import express from "express"
+import mysql from "mysql2/promise"
+import cors from "cors"
+import bcrypt from "bcrypt"
+import jwt from "jsonwebtoken"
+import cookieParser from "cookie-parser"
+import dotenv from "dotenv"
 
-const app = express();
-app.use(cors());
+dotenv.config() // load .env variables first
 
-// MySQL connection
+const app = express()
+
+// ---- MIDDLEWARE ----
+app.use(cors({
+    origin: "http://localhost:5173", // replace with your frontend origin
+    credentials: true                // allow cookies to be sent
+}))
+app.use(express.json())
+app.use(cookieParser())
+
+// ---- MYSQL CONNECTION ----
 const conn = await mysql.createConnection({
-  host: "127.0.0.1",
-  user: "mbxservices_ro",
-  port: 3307,               // matches SSH tunnel
-  password: "sv5hd2dg_F",
-  database: "mbxservices"
-});
+    host: process.env.DB_HOST || "127.0.0.1",
+    user: process.env.DB_USER || "delicious24cooking",
+    port: Number(process.env.DB_PORT) || 3307,
+    password: process.env.DB_PASS || "svs442DDF_F",
+    database: process.env.DB_NAME || "delicious24cooking"
+})
 
-// Helper function to get correct image URL
-function getImageUrl(imagePath, type = 'recipe') {
-  if (!imagePath) return null;
-  
-  const baseUrl = 'https://cook-it.club';
-  const filename = path.basename(imagePath);
-  
-  if (type === 'recipe') {
-    return `${baseUrl}/DATA/Recipe/${filename}`;
-  } else if (type === 'category') {
-    return `${baseUrl}/assets/img/category/${filename}`;
-  }
-  
-  return `${baseUrl}${imagePath}`;
+// ---- JWT SECRET ----
+const JWT_SECRET = process.env.JWT_SECRET
+if (!JWT_SECRET) {
+    console.error("Missing JWT_SECRET in .env")
+    process.exit(1)
 }
 
-// ---- GET ALL RECIPES ----
-export async function getRecipes(req, res) {
-  try {
-    const [rows] = await conn.execute(`
-      SELECT r.id, r.date_published, r.date_modified, r.rating, r.prep_time, r.cook_time, r.total_time, r.main_image,
-             rt.name
-      FROM recipes r
-      LEFT JOIN recipes_translations rt ON r.id = rt.recipe_id AND rt.locale = 'en'
-      LIMIT 1000
-    `);
-    const recipes = rows.map((r) => ({
-      ...r,
-      main_image: getImageUrl(r.main_image, 'recipe'),
-    }));
-    res.json(recipes);
-  } catch (err) {
-    console.error("SQL ERROR:", err);
-    res.status(500).json({ error: "Database query failed" });
-  }
-}
+// ---- REGISTER USER ----
+app.post("/auth/register", async (req, res) => {
+    const { username, email, password } = req.body
 
-app.get("/recipes", getRecipes);
-
-// ---- GET SINGLE RECIPE ----
-app.get("/recipes/:id", async (req, res) => {
-  const recipeId = Number(req.params.id);
-  try {
-    const [rows] = await conn.execute(`
-      SELECT r.*, rt.name, rt.description
-      FROM recipes r
-      LEFT JOIN recipes_translations rt ON r.id = rt.recipe_id AND rt.locale = 'en'
-      WHERE r.id = ?
-    `, [recipeId]);
-    if (rows[0]) {
-      rows[0].main_image = getImageUrl(rows[0].main_image, 'recipe');
+    if (!username || !email || !password) {
+        return res.status(400).json({ error: "All fields are required" })
     }
-    res.json(rows[0] || {});
-  } catch (err) {
-    console.error("SQL ERROR:", err);
-    res.status(500).json({ error: "Database query failed" });
-  }
-});
 
-// ---- GET INGREDIENTS ----
-app.get("/recipes/:id/ingredients", async (req, res) => {
-  const recipeId = Number(req.params.id);
-  try {
-    const [rows] = await conn.execute(`
-      SELECT rit.id, rit.ingredient
-      FROM recipe_ingredients ri
-      JOIN recipe_ingredients_translations rit ON ri.id = rit.recipe_ingredient_id AND rit.locale = 'en'
-      WHERE ri.recipe_id = ?
-      ORDER BY ri.id
-    `, [recipeId]);
-    res.json(rows);
-  } catch (err) {
-    console.error("SQL ERROR:", err);
-    res.status(500).json({ error: "Database query failed" });
-  }
-});
+    try {
+        const hashedPassword = await bcrypt.hash(password, 10)
+        await conn.execute(
+            "INSERT INTO users (username, email, password) VALUES (?, ?, ?)",
+            [username, email, hashedPassword]
+        )
 
-// ---- GET DIRECTIONS ----
-app.get("/recipes/:id/directions", async (req, res) => {
-  const recipeId = Number(req.params.id);
-  try {
-    const [rows] = await conn.execute(`
-      SELECT rdt.id, rdt.instruction
-      FROM recipe_directions rd
-      JOIN recipe_directions_translations rdt ON rd.id = rdt.recipe_direction_id AND rdt.locale = 'en'
-      WHERE rd.recipe_id = ?
-      ORDER BY rd.step_number
-    `, [recipeId]);
-    res.json(rows);
-  } catch (err) {
-    console.error("SQL ERROR:", err);
-    res.status(500).json({ error: "Database query failed" });
-  }
-});
-
-// ---- GET NUTRITION ----
-app.get("/recipes/:id/nutrition", async (req, res) => {
-  const recipeId = Number(req.params.id);
-  try {
-    const [rows] = await conn.execute(`
-      SELECT *
-      FROM recipe_nutrition
-      WHERE recipe_id = ?
-    `, [recipeId]);
-    res.json(rows[0] || {});
-  } catch (err) {
-    console.error("SQL ERROR:", err);
-    res.status(500).json({ error: "Database query failed" });
-  }
-});
-
-// ---- GET ALL CATEGORIES ----
-app.get("/categories", async (req, res) => {
-  try {
-    const [rows] = await conn.execute(`
-      SELECT c.id, c.image_url, ct.name, ct.description
-      FROM categories c
-      JOIN categories_translations ct ON c.id = ct.category_id
-      WHERE ct.locale = 'en'
-      ORDER BY ct.name
-    `);
-    
-    const categories = rows.map((c) => ({
-      ...c,
-      image_url: getImageUrl(c.image_url, 'category'),
-    }));
-    
-    res.json(categories);
-  } catch (err) {
-    console.error("SQL ERROR:", err);
-    res.status(500).json({ error: "Database query failed" });
-  }
-});
-
-// ---- GET CATEGORY INFO ----
-app.get("/categories/:id", async (req, res) => {
-  const categoryId = Number(req.params.id);
-  try {
-    const [rows] = await conn.execute(`
-      SELECT c.id, c.image_url, ct.name, ct.description
-      FROM categories c
-      JOIN categories_translations ct ON c.id = ct.category_id
-      WHERE c.id = ? AND ct.locale = 'en'
-    `, [categoryId]);
-    
-    if (rows[0]) {
-      rows[0].image_url = getImageUrl(rows[0].image_url, 'category');
+        res.json({ message: "User registered successfully" })
+    } catch (err) {
+        console.error("REGISTER ERROR:", err)
+        if (err.code === "ER_DUP_ENTRY") {
+            res.status(409).json({ error: "Username or email already exists" })
+        } else {
+            res.status(500).json({ error: "Database error" })
+        }
     }
-    
-    res.json(rows[0] || {});
-  } catch (err) {
-    console.error("SQL ERROR:", err);
-    res.status(500).json({ error: "Database query failed" });
-  }
-});
+})
 
-// ---- GET RECIPES IN CATEGORY ----
-app.get("/categories/:id/recipes", async (req, res) => {
-  const categoryId = Number(req.params.id);
-  try {
-    const [rows] = await conn.execute(`
-      SELECT r.id, r.main_image, rt.name, r.rating
-      FROM recipe_categories rc
-      JOIN recipes r ON rc.recipe_id = r.id
-      LEFT JOIN recipes_translations rt ON r.id = rt.recipe_id AND rt.locale = 'en'
-      WHERE rc.category_id = ?
-    `, [categoryId]);
+// ---- LOGIN USER (sets JWT cookie) ----
+app.post("/auth/login", async (req, res) => {
+    const { username, password } = req.body
 
-    const recipes = rows.map((r) => ({
-      ...r,
-      main_image: getImageUrl(r.main_image, 'recipe'),
-    }));
+    try {
+        const [rows] = await conn.execute(
+            "SELECT * FROM users WHERE username = ?",
+            [username]
+        )
 
-    res.json(recipes);
-  } catch (err) {
-    console.error("SQL ERROR:", err);
-    res.status(500).json({ error: "Database query failed" });
-  }
-});
+        if (rows.length === 0) {
+            return res.status(401).json({ error: "Invalid credentials" })
+        }
+
+        const user = rows[0]
+        const match = await bcrypt.compare(password, user.password)
+
+        if (!match) {
+            return res.status(401).json({ error: "Invalid credentials" })
+        }
+
+        const token = jwt.sign(
+            { id: user.id, username: user.username, email: user.email },
+            JWT_SECRET,
+            { expiresIn: "2h" }
+        )
+
+        // Set token as HttpOnly cookie
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: false,      // set true if using HTTPS
+            sameSite: "lax",
+            maxAge: 2 * 60 * 60 * 1000 // 2 hours
+        })
+
+        res.json({ message: "Login successful" })
+    } catch (err) {
+        console.error("LOGIN ERROR:", err)
+        res.status(500).json({ error: "Database error" })
+    }
+})
+
+// ---- PROTECTED ROUTE ----
+app.get("/auth/me", (req, res) => {
+    const token = req.cookies.token
+    if (!token) return res.status(401).json({ error: "Missing token" })
+
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET)
+        res.json(decoded)
+    } catch (err) {
+        res.status(401).json({ error: "Invalid or expired token" })
+    }
+})
+
+// ---- LOGOUT ROUTE ----
+app.post("/auth/logout", (req, res) => {
+    res.clearCookie("token", { httpOnly: true, sameSite: "lax" })
+    res.json({ message: "Logged out" })
+})
 
 // ---- START SERVER ----
-app.listen(3000, () => console.log("API running on http://localhost:3000"));
+app.listen(3000, () => {
+    console.log("API running on http://localhost:3000")
+})

@@ -1,4 +1,3 @@
-<!-- src/components/Header.vue -->
 <template>
   <header class="site-header">
     <nav class="nav">
@@ -25,7 +24,6 @@
             <span class="link-icon">💬</span> Contact
           </router-link>
         </li>
-        <!-- New Buttons -->
         <li>
           <router-link to="/terms-conditions" @click="closeMenu" class="nav-link">
             <span class="link-icon">📄</span> Terms
@@ -42,7 +40,6 @@
           </router-link>
         </li>
 
-        <!-- Login / Logout -->
         <li v-if="!loggedIn">
           <router-link to="/login" @click="closeMenu" class="nav-link">
             <span class="link-icon">🔑</span> Login
@@ -55,7 +52,6 @@
         </li>
       </ul>
 
-
       <!-- Hamburger Button -->
       <button class="menu-toggle" @click="toggleMenu" :aria-expanded="menuOpen.toString()" aria-label="Toggle menu">
         <span :class="{ open: menuOpen }"></span>
@@ -67,14 +63,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from "vue"
+import { ref, onMounted } from "vue"
 import { useRouter } from "vue-router"
+import { useAuthStore } from "@/stores/auth"
+import { storeToRefs } from "pinia"
 
 const router = useRouter()
+const auth = useAuthStore()
+const { loggedIn } = storeToRefs(auth) // ✅ reactive ref
 
 const menuOpen = ref(false)
-// make it reactive with ref
-const loggedIn = ref(sessionStorage.getItem("loggedIn") === "true")
 
 const toggleMenu = () => {
   menuOpen.value = !menuOpen.value
@@ -86,36 +84,15 @@ const closeMenu = () => {
   document.body.style.overflow = ""
 }
 
-const handleResize = () => {
-  if (window.innerWidth > 768) {
-    closeMenu()
-  }
-}
-
-onMounted(() => {
-  window.addEventListener("resize", handleResize)
-  // keep in sync across tabs
-  window.addEventListener("storage", syncLoginState)
-})
-
-onBeforeUnmount(() => {
-  window.removeEventListener("resize", handleResize)
-  window.removeEventListener("storage", syncLoginState)
-})
-
-// logout handler
-const logout = () => {
-  sessionStorage.removeItem("loggedIn")
-  loggedIn.value = false
+const logout = async () => {
+  await auth.logout()
   router.push("/login")
 }
 
-// helper to sync state across tabs
-const syncLoginState = () => {
-  loggedIn.value = sessionStorage.getItem("loggedIn") === "true"
-}
+onMounted(() => {
+  auth.checkLogin() // initial check from backend
+})
 </script>
-
 
 <style scoped>
 /* ===== Header Layout ===== */
