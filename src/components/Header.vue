@@ -70,7 +70,7 @@ import { storeToRefs } from "pinia"
 
 const router = useRouter()
 const auth = useAuthStore()
-const { loggedIn } = storeToRefs(auth) // ✅ reactive ref
+const { loggedIn } = storeToRefs(auth)
 
 const menuOpen = ref(false)
 
@@ -93,7 +93,6 @@ onMounted(() => {
   auth.checkLogin() // initial check from backend
 })
 </script>
-
 <style scoped>
 /* ===== Header Layout ===== */
 .site-header {
