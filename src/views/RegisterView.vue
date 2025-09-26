@@ -47,7 +47,7 @@ const register = async () => {
     success.value = ""
 
     try {
-        const response = await fetch("http://back.delicious24cooking.com/auth/register", {
+        const response = await fetch("https://back.delicious24cooking.com/auth/register", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

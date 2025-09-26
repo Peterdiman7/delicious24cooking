@@ -44,7 +44,7 @@ const login = async () => {
   success.value = ""
 
   try {
-    const response = await fetch("http://back.delicious24cooking.com/auth/login", {
+    const response = await fetch("https://back.delicious24cooking.com/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include", // important to send/receive cookies

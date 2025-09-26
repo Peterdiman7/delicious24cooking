@@ -55,7 +55,7 @@ const createRouter = () => {
         let loggedIn = false
 
         try {
-            const res = await fetch("http://back.delicious24cooking.com/auth/me", {
+            const res = await fetch("https://back.delicious24cooking.com/auth/me", {
                 credentials: "include"
             })
             loggedIn = res.ok

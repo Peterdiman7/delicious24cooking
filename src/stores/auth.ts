@@ -8,7 +8,7 @@ export const useAuthStore = defineStore("auth", () => {
 
     const checkLogin = async () => {
         try {
-            const res = await fetch("http://back.delicious24cooking.com/auth/me", {
+            const res = await fetch("https://back.delicious24cooking.com/auth/me", {
                 credentials: "include",
             })
             _loggedIn.value = res.ok
@@ -18,7 +18,7 @@ export const useAuthStore = defineStore("auth", () => {
     }
 
     const logout = async () => {
-        await fetch("http://back.delicious24cooking.com/auth/logout", {
+        await fetch("https://back.delicious24cooking.com/auth/logout", {
             method: "POST",
             credentials: "include",
         })
