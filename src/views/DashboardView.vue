@@ -1,157 +1,106 @@
 <template>
-  <div class="dashboard">
-    <!-- Dashboard Header -->
-    <header class="dashboard-header">
-      <div class="user-info">
-        <img :src="user.avatar" :alt="user.name" class="user-avatar" />
-        <div class="user-details">
-          <h1 class="user-name">Welcome back, {{ user.name }}! 👋</h1>
-          <p class="user-subtitle">
-            Ready to create something delicious today?
-          </p>
-          <div class="user-stats">
-            <span class="stat">
-              <strong>{{ user.recipesCreated }}</strong> recipes
-            </span>
-            <span class="stat">
-              <strong>{{ formatNumber(user.followers) }}</strong> followers
-            </span>
-            <span class="stat">
-              <strong>{{ user.plan }}</strong> plan
-            </span>
+  <div class="barista-dashboard">
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="hero-container">
+        <div class="hero-content">
+          <img :src="user.avatar" :alt="user.name" class="user-avatar" />
+          <div class="user-info">
+            <em class="small-text">welcome back</em>
+            <h1>{{ user.name }}</h1>
+            <p class="hero-subtitle">
+              your <em>favourite</em> recipes daily lives.
+            </p>
+            <div class="user-stats">
+              <span><strong>{{ user.recipesCreated }}</strong> recipes</span>
+              <span><strong>{{ formatNumber(user.followers) }}</strong> followers</span>
+              <span><strong>{{ user.plan }}</strong> plan</span>
+            </div>
+          </div>
+          <div class="hero-actions">
+            <button class="btn custom-btn custom-border-btn">
+              New Recipe
+            </button>
+            <button class="btn custom-btn">
+              <strong>Analytics</strong>
+            </button>
           </div>
         </div>
       </div>
-      <div class="quick-actions">
-        <button class="action-btn primary" @click="createNewRecipe">
-          <span class="btn-icon">➕</span>
-          New Recipe
-        </button>
-        <button class="action-btn secondary" @click="viewAnalytics">
-          <span class="btn-icon">📊</span>
-          Analytics
-        </button>
-      </div>
-    </header>
+    </section>
 
     <!-- Navigation Tabs -->
-    <nav class="dashboard-tabs">
-      <button v-for="tab in ['overview', 'recipes', 'favorites', 'activity', 'settings']" 
-              :key="tab"
-              class="tab-btn" 
-              :class="{ active: activeTab === tab }" 
-              @click="setActiveTab(tab)">
-        {{ tab.charAt(0).toUpperCase() + tab.slice(1) }}
-      </button>
+    <nav class="dashboard-nav">
+      <div class="nav-container">
+        <button v-for="tab in tabs" :key="tab" class="nav-tab" :class="{ active: activeTab === tab }"
+          @click="activeTab = tab">
+          {{ tab.charAt(0).toUpperCase() + tab.slice(1) }}
+        </button>
+      </div>
     </nav>
 
-    <!-- Dashboard Content -->
-    <main class="dashboard-content">
+    <!-- Main Content -->
+    <main class="main-content">
       <!-- Overview Tab -->
-      <section v-if="activeTab === 'overview'" class="overview-section">
+      <section v-if="activeTab === 'overview'" class="section-padding">
         <!-- Analytics Cards -->
         <div class="analytics-grid">
-          <div class="analytics-card">
+          <div v-for="(stat, idx) in analyticsStats" :key="idx" class="analytics-card">
             <div class="card-header">
-              <h3>Total Recipes</h3>
-              <span class="card-icon">🍳</span>
+              <h3>{{ stat.label }}</h3>
+              <span class="card-icon">{{ stat.icon }}</span>
             </div>
-            <div class="card-value">{{ analytics.totalRecipes }}</div>
-            <div class="card-growth positive">
-              ↗️ +{{ analytics.weeklyGrowth }}% this week
-            </div>
-          </div>
-
-          <div class="analytics-card">
-            <div class="card-header">
-              <h3>Total Likes</h3>
-              <span class="card-icon">❤️</span>
-            </div>
-            <div class="card-value">{{ formatNumber(analytics.totalLikes) }}</div>
-            <div class="card-growth positive">
-              ↗️ +{{ analytics.monthlyGrowth }}% this month
-            </div>
-          </div>
-
-          <div class="analytics-card">
-            <div class="card-header">
-              <h3>Recipe Views</h3>
-              <span class="card-icon">👁️</span>
-            </div>
-            <div class="card-value">{{ formatNumber(analytics.totalViews) }}</div>
-            <div class="card-growth positive">
-              ↗️ +18.7% this month
-            </div>
-          </div>
-
-          <div class="analytics-card">
-            <div class="card-header">
-              <h3>Followers</h3>
-              <span class="card-icon">👥</span>
-            </div>
-            <div class="card-value">{{ formatNumber(analytics.totalFollowers) }}</div>
-            <div class="card-growth positive">
-              ↗️ +{{ analytics.weeklyGrowth }}% this week
+            <div class="card-value">{{ stat.value }}</div>
+            <div class="card-growth">
+              ↗️ +{{ stat.growth }}% growth
             </div>
           </div>
         </div>
 
-        <!-- Recent Activity & Quick Stats -->
+        <!-- Recent Activity & Stats -->
         <div class="overview-grid">
-          <div class="activity-preview">
+          <div class="activity-section">
             <h3 class="section-title">Recent Activity</h3>
             <div class="activity-list">
-              <div v-for="activity in recentActivity.slice(0, 4)" :key="activity.id"
-                   class="activity-item">
+              <div v-for="activity in recentActivity.slice(0, 4)" :key="activity.id" class="activity-item">
                 <span class="activity-icon">{{ getActivityIcon(activity.type) }}</span>
                 <div class="activity-content">
-                  <p class="activity-message">{{ activity.message }}</p>
+                  <p>{{ activity.message }}</p>
                   <span class="activity-time">{{ activity.timestamp }}</span>
                 </div>
               </div>
             </div>
-            <button class="view-all-btn" @click="setActiveTab('activity')">View All Activity</button>
           </div>
 
-          <div class="quick-stats">
+          <div class="stats-section">
             <h3 class="section-title">Quick Stats</h3>
             <div class="stats-list">
-              <div class="stat-item">
-                <span class="stat-label">Average Rating</span>
-                <span class="stat-value">{{ averageRating }} ⭐</span>
-              </div>
-              <div class="stat-item">
-                <span class="stat-label">Bookmarked Recipes</span>
-                <span class="stat-value">{{ bookmarkedCount }} 📑</span>
-              </div>
-              <div class="stat-item">
-                <span class="stat-label">Total Engagement</span>
-                <span class="stat-value">{{ formatNumber(totalEngagement) }} 🎯</span>
-              </div>
-              <div class="stat-item">
-                <span class="stat-label">Member Since</span>
-                <span class="stat-value">{{ new Date(user.joinedDate).getFullYear() }} 📅</span>
+              <div v-for="(stat, idx) in quickStats" :key="idx" class="stat-item">
+                <span class="stat-label">{{ stat.label }}</span>
+                <span class="stat-value">{{ stat.value }}</span>
               </div>
             </div>
           </div>
         </div>
 
         <!-- Recent Recipes Preview -->
-        <div class="recent-recipes-preview">
+        <div class="recent-recipes">
           <div class="section-header">
             <h3 class="section-title">Latest Recipes</h3>
-            <button class="view-all-btn" @click="setActiveTab('recipes')">View All</button>
+            <button class="btn-link" @click="activeTab = 'recipes'">
+              View All
+            </button>
           </div>
           <div class="recipes-preview-grid">
-            <div v-for="recipe in recentRecipes.slice(0, 3)" :key="recipe.id" 
-                 class="recipe-preview-card"
-                 @click="viewRecipe(recipe.id)">
-              <img :src="recipe.image" :alt="recipe.title" class="preview-image" />
-              <div class="preview-content">
+            <div v-for="recipe in recentRecipes.slice(0, 3)" :key="recipe.id" class="recipe-preview-card">
+              <div class="recipe-image-container">
+                <img :src="recipe.image" :alt="recipe.title" />
+              </div>
+              <div class="recipe-content">
                 <h4>{{ recipe.title }}</h4>
-                <div class="preview-meta">
-                  <span class="preview-rating">{{ recipe.rating }}⭐</span>
-                  <span class="preview-likes">{{ formatNumber(recipe.likes) }}❤️</span>
+                <div class="recipe-meta">
+                  <span>{{ recipe.rating }}⭐</span>
+                  <span>{{ formatNumber(recipe.likes) }}❤️</span>
                 </div>
               </div>
             </div>
@@ -159,32 +108,28 @@
         </div>
       </section>
 
-      <!-- My Recipes Tab -->
-      <section v-if="activeTab === 'recipes'" class="recipes-section">
+      <!-- Recipes Tab -->
+      <section v-if="activeTab === 'recipes'" class="section-padding">
         <div class="section-header">
           <h2 class="section-title">My Recipes ({{ recentRecipes.length }})</h2>
-          <div class="recipe-controls">
-            <button class="filter-btn" @click="showRecipeFilters = !showRecipeFilters">
-              <span class="btn-icon">🔍</span>
-              Filter & Sort
+          <div class="section-actions">
+            <button class="btn custom-border-btn" @click="showRecipeFilters = !showRecipeFilters">
+              🔍 Filter
             </button>
-            <button class="action-btn primary" @click="createNewRecipe">
-              <span class="btn-icon">➕</span>
-              New Recipe
+            <button class="btn custom-btn">
+              ➕ <strong>New Recipe</strong>
             </button>
           </div>
         </div>
 
         <!-- Recipe Filters -->
-        <div class="recipe-filters" v-if="showRecipeFilters">
-          <div class="filter-row">
-            <input v-model="recipeSearchQuery" 
-                   placeholder="Search recipes..." 
-                   class="filter-input" />
+        <div v-if="showRecipeFilters" class="filters-section">
+          <div class="filters-row">
+            <input v-model="recipeSearchQuery" type="text" placeholder="Search recipes..." class="filter-input" />
             <select v-model="recipeCategory" class="filter-select">
               <option value="">All Categories</option>
-              <option v-for="category in recipeCategories" :key="category" :value="category">
-                {{ category }}
+              <option v-for="cat in recipeCategories" :key="cat" :value="cat">
+                {{ cat }}
               </option>
             </select>
             <select v-model="recipeDifficulty" class="filter-select">
@@ -196,48 +141,32 @@
           </div>
         </div>
 
+        <!-- Recipes Grid -->
         <div class="recipes-grid">
           <div v-for="recipe in filteredRecipes" :key="recipe.id" class="recipe-card">
-            <div class="recipe-image-container">
-              <img :src="recipe.image" :alt="recipe.title" class="recipe-image" loading="lazy" />
-              <button class="bookmark-btn" :class="{ bookmarked: recipe.isBookmarked }"
-                      @click="toggleBookmark(recipe)">
-                {{ recipe.isBookmarked ? '🔖' : '📑' }}
-              </button>
-              <div class="recipe-difficulty">
-                <span class="difficulty-badge"
-                      :style="{ backgroundColor: getDifficultyColor(recipe.difficulty) }">
-                  {{ recipe.difficulty }}
-                </span>
-              </div>
+            <div class="recipe-image-wrap">
+              <img :src="recipe.image" :alt="recipe.title" />
+              <span class="difficulty-badge" :style="{ background: getDifficultyColor(recipe.difficulty) }">
+                {{ recipe.difficulty }}
+              </span>
             </div>
-
-            <div class="recipe-content">
-              <h3 class="recipe-title">{{ recipe.title }}</h3>
+            <div class="recipe-info">
+              <h3>{{ recipe.title }}</h3>
               <p class="recipe-category">{{ recipe.category }}</p>
-
-              <div class="recipe-meta">
-                <div class="recipe-rating">
-                  <span class="stars">{{ generateStars(recipe.rating) }}</span>
-                  <span class="rating-number">{{ recipe.rating }}</span>
+              <div class="recipe-stats">
+                <div class="rating">
+                  <span>{{ generateStars(recipe.rating) }}</span>
+                  <strong>{{ recipe.rating }}</strong>
                 </div>
-
-                <div class="recipe-stats">
-                  <span class="stat">❤️ {{ formatNumber(recipe.likes) }}</span>
-                  <span class="stat">⏱️ {{ recipe.cookingTime }}min</span>
+                <div class="stats-row">
+                  <span>❤️ {{ formatNumber(recipe.likes) }}</span>
+                  <span>⏱️ {{ recipe.cookingTime }}min</span>
                 </div>
               </div>
-
               <div class="recipe-actions">
-                <button class="recipe-action-btn edit" @click="editRecipe(recipe.id)">
-                  <span class="btn-icon">✏️</span> Edit
-                </button>
-                <button class="recipe-action-btn view" @click="viewRecipe(recipe.id)">
-                  <span class="btn-icon">👁️</span> View
-                </button>
-                <button class="recipe-action-btn share" @click="shareRecipe(recipe.id)">
-                  <span class="btn-icon">🔄</span> Share
-                </button>
+                <button class="action-btn">✏️ Edit</button>
+                <button class="action-btn">👁️ View</button>
+                <button class="action-btn">🔄 Share</button>
               </div>
             </div>
           </div>
@@ -245,71 +174,54 @@
       </section>
 
       <!-- Favorites Tab -->
-      <section v-if="activeTab === 'favorites'" class="favorites-section">
+      <section v-if="activeTab === 'favorites'" class="section-padding">
         <div class="section-header">
           <h2 class="section-title">Favorite Recipes ({{ favoriteRecipes.length }})</h2>
-          <button class="filter-btn" @click="showFavoriteFilters = !showFavoriteFilters">
-            <span class="btn-icon">🔍</span>
-            Filter by Category
+          <button class="btn custom-border-btn" @click="showFavoriteFilters = !showFavoriteFilters">
+            🔍 Filter
           </button>
         </div>
 
         <!-- Favorite Filters -->
-        <div class="recipe-filters" v-if="showFavoriteFilters">
-          <div class="filter-row">
-            <input v-model="favoriteSearchQuery" 
-                   placeholder="Search favorites..." 
-                   class="filter-input" />
+        <div v-if="showFavoriteFilters" class="filters-section">
+          <div class="filters-row">
+            <input v-model="favoriteSearchQuery" type="text" placeholder="Search favorites..." class="filter-input" />
             <select v-model="favoriteCategory" class="filter-select">
               <option value="">All Categories</option>
-              <option v-for="category in favoriteCategories" :key="category" :value="category">
-                {{ category }}
+              <option v-for="cat in favoriteCategories" :key="cat" :value="cat">
+                {{ cat }}
               </option>
             </select>
           </div>
         </div>
 
+        <!-- Favorites Grid -->
         <div class="recipes-grid">
-          <div v-for="recipe in filteredFavorites" :key="recipe.id" class="recipe-card favorite">
-            <div class="recipe-image-container">
-              <img :src="recipe.image" :alt="recipe.title" class="recipe-image" loading="lazy" />
-              <button class="bookmark-btn bookmarked" @click="toggleBookmark(recipe)">
-                🔖
-              </button>
-              <div class="recipe-difficulty">
-                <span class="difficulty-badge"
-                      :style="{ backgroundColor: getDifficultyColor(recipe.difficulty) }">
-                  {{ recipe.difficulty }}
-                </span>
-              </div>
+          <div v-for="recipe in filteredFavorites" :key="recipe.id" class="recipe-card">
+            <div class="recipe-image-wrap">
+              <img :src="recipe.image" :alt="recipe.title" />
+              <span class="difficulty-badge" :style="{ background: getDifficultyColor(recipe.difficulty) }">
+                {{ recipe.difficulty }}
+              </span>
+              <button class="bookmark-btn active">🔖</button>
             </div>
-
-            <div class="recipe-content">
-              <h3 class="recipe-title">{{ recipe.title }}</h3>
+            <div class="recipe-info">
+              <h3>{{ recipe.title }}</h3>
               <p class="recipe-author">by {{ recipe.author }}</p>
-
-              <div class="recipe-meta">
-                <div class="recipe-rating">
-                  <span class="stars">{{ generateStars(recipe.rating) }}</span>
-                  <span class="rating-number">{{ recipe.rating }}</span>
+              <div class="recipe-stats">
+                <div class="rating">
+                  <span>{{ generateStars(recipe.rating) }}</span>
+                  <strong>{{ recipe.rating }}</strong>
                 </div>
-
-                <div class="recipe-stats">
-                  <span class="stat">❤️ {{ formatNumber(recipe.likes) }}</span>
-                  <span class="stat">⏱️ {{ recipe.cookingTime }}min</span>
+                <div class="stats-row">
+                  <span>❤️ {{ formatNumber(recipe.likes) }}</span>
+                  <span>⏱️ {{ recipe.cookingTime }}min</span>
                 </div>
               </div>
-
               <div class="recipe-actions">
-                <button class="recipe-action-btn cook" @click="startCooking(recipe.id)">
-                  <span class="btn-icon">🍳</span> Cook Now
-                </button>
-                <button class="recipe-action-btn view" @click="viewRecipe(recipe.id)">
-                  <span class="btn-icon">👁️</span> View
-                </button>
-                <button class="recipe-action-btn remove" @click="removeFavorite(recipe.id)">
-                  <span class="btn-icon">❌</span> Remove
-                </button>
+                <button class="action-btn">🍳 Cook</button>
+                <button class="action-btn">👁️ View</button>
+                <button class="action-btn">❌ Remove</button>
               </div>
             </div>
           </div>
@@ -317,19 +229,17 @@
       </section>
 
       <!-- Activity Tab -->
-      <section v-if="activeTab === 'activity'" class="activity-section">
+      <section v-if="activeTab === 'activity'" class="section-padding">
         <div class="section-header">
           <h2 class="section-title">Activity Feed</h2>
-          <div class="activity-controls">
-            <select v-model="activityFilter" class="filter-select">
-              <option value="">All Activity</option>
-              <option value="like">Likes</option>
-              <option value="comment">Comments</option>
-              <option value="follow">Follows</option>
-              <option value="recipe_created">Recipe Created</option>
-              <option value="recipe_shared">Recipe Shared</option>
-            </select>
-          </div>
+          <select v-model="activityFilter" class="filter-select">
+            <option value="">All Activity</option>
+            <option value="like">Likes</option>
+            <option value="comment">Comments</option>
+            <option value="follow">Follows</option>
+            <option value="recipe_created">Recipe Created</option>
+            <option value="recipe_shared">Recipe Shared</option>
+          </select>
         </div>
 
         <div class="activity-feed">
@@ -338,26 +248,18 @@
               {{ getActivityIcon(activity.type) }}
             </div>
             <div class="activity-details">
-              <p class="activity-message-detailed">{{ activity.message }}</p>
+              <p>{{ activity.message }}</p>
               <span class="activity-timestamp">{{ activity.timestamp }}</span>
               <div v-if="activity.user" class="activity-user">
                 <span class="user-tag">@{{ activity.user }}</span>
               </div>
-            </div>
-            <div class="activity-actions">
-              <button v-if="activity.type === 'like'" class="activity-action-btn">
-                <span class="btn-icon">❤️</span>
-              </button>
-              <button v-if="activity.type === 'comment'" class="activity-action-btn">
-                <span class="btn-icon">💬</span>
-              </button>
             </div>
           </div>
         </div>
       </section>
 
       <!-- Settings Tab -->
-      <section v-if="activeTab === 'settings'" class="settings-section">
+      <section v-if="activeTab === 'settings'" class="section-padding">
         <div class="section-header">
           <h2 class="section-title">Account Settings</h2>
         </div>
@@ -375,10 +277,10 @@
             </div>
             <div class="settings-item">
               <label>Bio</label>
-              <textarea v-model="userSettings.bio" class="settings-textarea" rows="3" 
-                        placeholder="Tell us about yourself..."></textarea>
+              <textarea v-model="userSettings.bio" class="settings-textarea" rows="3"
+                placeholder="Tell us about yourself..."></textarea>
             </div>
-            <button class="settings-btn primary" @click="updateProfile">Update Profile</button>
+            <button class="btn custom-btn">Update Profile</button>
           </div>
 
           <div class="settings-card">
@@ -395,34 +297,30 @@
               <div class="feature-item">✅ Video tutorials</div>
               <div class="feature-item">✅ Chef consultations</div>
             </div>
-            <button class="settings-btn secondary" @click="changePlan">Change Plan</button>
+            <button class="btn custom-border-btn">Change Plan</button>
           </div>
 
           <div class="settings-card">
             <h3>Notifications</h3>
             <div class="notification-settings">
-              <label class="switch">
+              <label class="switch-label">
                 <input v-model="userSettings.emailNotifications" type="checkbox" />
-                <span class="slider"></span>
-                Email notifications
+                <span class="switch-text">Email notifications</span>
               </label>
-              <label class="switch">
+              <label class="switch-label">
                 <input v-model="userSettings.followerAlerts" type="checkbox" />
-                <span class="slider"></span>
-                New follower alerts
+                <span class="switch-text">New follower alerts</span>
               </label>
-              <label class="switch">
+              <label class="switch-label">
                 <input v-model="userSettings.recipeRecommendations" type="checkbox" />
-                <span class="slider"></span>
-                Recipe recommendations
+                <span class="switch-text">Recipe recommendations</span>
               </label>
-              <label class="switch">
+              <label class="switch-label">
                 <input v-model="userSettings.marketingEmails" type="checkbox" />
-                <span class="slider"></span>
-                Marketing emails
+                <span class="switch-text">Marketing emails</span>
               </label>
             </div>
-            <button class="settings-btn primary" @click="updateNotifications">Save Preferences</button>
+            <button class="btn custom-btn">Save Preferences</button>
           </div>
 
           <div class="settings-card">
@@ -443,7 +341,7 @@
                 <option value="disabled">Disable sharing</option>
               </select>
             </div>
-            <button class="settings-btn secondary" @click="updatePrivacy">Update Privacy</button>
+            <button class="btn custom-btn">Update Privacy</button>
           </div>
         </div>
       </section>
@@ -451,43 +349,27 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, reactive, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import type { User, Recipe, Analytics, Activity } from '@/types'
+<script setup>
+import { ref, computed } from 'vue'
 
-const router = useRouter()
+const activeTab = ref('overview')
+const showRecipeFilters = ref(false)
+const showFavoriteFilters = ref(false)
+const recipeSearchQuery = ref('')
+const favoriteSearchQuery = ref('')
+const recipeCategory = ref('')
+const favoriteCategory = ref('')
+const recipeDifficulty = ref('')
+const activityFilter = ref('')
 
-// Types
-interface UserSettings {
-  name: string
-  email: string
-  bio: string
-  emailNotifications: boolean
-  followerAlerts: boolean
-  recipeRecommendations: boolean
-  marketingEmails: boolean
-  profileVisibility: 'public' | 'friends' | 'private'
-  recipeSharing: 'public' | 'ask' | 'disabled'
-}
+const tabs = ['overview', 'recipes', 'favorites', 'activity', 'settings']
 
-// Reactive state
-const activeTab = ref<string>('overview')
-const showRecipeFilters = ref<boolean>(false)
-const showFavoriteFilters = ref<boolean>(false)
-const recipeSearchQuery = ref<string>('')
-const favoriteSearchQuery = ref<string>('')
-const recipeCategory = ref<string>('')
-const favoriteCategory = ref<string>('')
-const recipeDifficulty = ref<string>('')
-const activityFilter = ref<string>('')
-
-const user = ref<User>({
+const user = ref({
   id: 1,
   name: 'Chef Alexander',
   email: 'chef.alexander@delicious24.com',
   avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&face=center',
-  plan: 'User\'s Choice',
+  plan: "User's Choice",
   recipesCreated: 47,
   recipesLiked: 1248,
   followers: 3420,
@@ -495,9 +377,9 @@ const user = ref<User>({
   joinedDate: '2023-03-15'
 })
 
-const userSettings = reactive<UserSettings>({
-  name: user.value.name,
-  email: user.value.email,
+const userSettings = ref({
+  name: 'Chef Alexander',
+  email: 'chef.alexander@delicious24.com',
   bio: 'Passionate chef creating delicious recipes for food lovers worldwide.',
   emailNotifications: true,
   followerAlerts: true,
@@ -507,16 +389,16 @@ const userSettings = reactive<UserSettings>({
   recipeSharing: 'public'
 })
 
-const analytics = reactive<Analytics>({
+const analytics = {
   totalRecipes: 47,
   totalLikes: 12840,
   totalViews: 45320,
   totalFollowers: 3420,
   weeklyGrowth: 12.5,
   monthlyGrowth: 34.2
-})
+}
 
-const recentRecipes = reactive<Recipe[]>([
+const recentRecipes = ref([
   {
     id: 1,
     title: 'Spicy Thai Green Curry',
@@ -571,7 +453,7 @@ const recentRecipes = reactive<Recipe[]>([
   }
 ])
 
-const favoriteRecipes = reactive<Recipe[]>([
+const favoriteRecipes = ref([
   {
     id: 5,
     title: 'Beef Wellington',
@@ -613,7 +495,7 @@ const favoriteRecipes = reactive<Recipe[]>([
   }
 ])
 
-const recentActivity = reactive<Activity[]>([
+const recentActivity = [
   {
     id: 1,
     type: 'like',
@@ -654,47 +536,47 @@ const recentActivity = reactive<Activity[]>([
     timestamp: '3 days ago',
     user: 'John'
   }
+]
+
+const analyticsStats = computed(() => [
+  { label: 'Total Recipes', value: analytics.totalRecipes, icon: '🍳', growth: analytics.weeklyGrowth },
+  { label: 'Total Likes', value: formatNumber(analytics.totalLikes), icon: '❤️', growth: analytics.monthlyGrowth },
+  { label: 'Recipe Views', value: formatNumber(analytics.totalViews), icon: '👁️', growth: 18.7 },
+  { label: 'Followers', value: formatNumber(analytics.totalFollowers), icon: '👥', growth: analytics.weeklyGrowth }
 ])
 
-// Computed properties
-const totalEngagement = computed(() =>
-  analytics.totalLikes + analytics.totalViews + analytics.totalFollowers
-)
-
-const averageRating = computed(() => {
-  const total = recentRecipes.reduce((sum, recipe) => sum + recipe.rating, 0)
-  return (total / recentRecipes.length).toFixed(1)
-})
-
-const bookmarkedCount = computed(() =>
-  [...recentRecipes, ...favoriteRecipes].filter(recipe => recipe.isBookmarked).length
-)
+const quickStats = [
+  { label: 'Average Rating', value: '4.7 ⭐' },
+  { label: 'Bookmarked Recipes', value: '8 📑' },
+  { label: 'Total Engagement', value: formatNumber(61580) + ' 🎯' },
+  { label: 'Member Since', value: '2023 📅' }
+]
 
 const recipeCategories = computed(() =>
-  Array.from(new Set(recentRecipes.map(recipe => recipe.category)))
+  Array.from(new Set(recentRecipes.value.map(recipe => recipe.category)))
 )
 
 const favoriteCategories = computed(() =>
-  Array.from(new Set(favoriteRecipes.map(recipe => recipe.category)))
+  Array.from(new Set(favoriteRecipes.value.map(recipe => recipe.category)))
 )
 
 const filteredRecipes = computed(() => {
-  return recentRecipes.filter(recipe => {
-    const matchesSearch = !recipeSearchQuery.value || 
+  return recentRecipes.value.filter(recipe => {
+    const matchesSearch = !recipeSearchQuery.value ||
       recipe.title.toLowerCase().includes(recipeSearchQuery.value.toLowerCase())
     const matchesCategory = !recipeCategory.value || recipe.category === recipeCategory.value
     const matchesDifficulty = !recipeDifficulty.value || recipe.difficulty === recipeDifficulty.value
-    
+
     return matchesSearch && matchesCategory && matchesDifficulty
   })
 })
 
 const filteredFavorites = computed(() => {
-  return favoriteRecipes.filter(recipe => {
-    const matchesSearch = !favoriteSearchQuery.value || 
+  return favoriteRecipes.value.filter(recipe => {
+    const matchesSearch = !favoriteSearchQuery.value ||
       recipe.title.toLowerCase().includes(favoriteSearchQuery.value.toLowerCase())
     const matchesCategory = !favoriteCategory.value || recipe.category === favoriteCategory.value
-    
+
     return matchesSearch && matchesCategory
   })
 })
@@ -705,88 +587,28 @@ const filteredActivity = computed(() => {
   })
 })
 
-// Methods
-const setActiveTab = (tab: string): void => {
-  activeTab.value = tab
-}
-
-const createNewRecipe = (): void => {
-  router.push('/recipe/new')
-}
-
-const viewAnalytics = (): void => {
-  router.push('/analytics')
-}
-
-const viewRecipe = (recipeId: number): void => {
-  router.push(`/recipe/${recipeId}`)
-}
-
-const editRecipe = (recipeId: number): void => {
-  router.push(`/recipe/${recipeId}/edit`)
-}
-
-const shareRecipe = (recipeId: number): void => {
-  // Handle recipe sharing
-  console.log('Sharing recipe:', recipeId)
-  // Could open share modal or copy link
-}
-
-const startCooking = (recipeId: number): void => {
-  router.push(`/recipe/${recipeId}/cook`)
-}
-
-const removeFavorite = (recipeId: number): void => {
-  const index = favoriteRecipes.findIndex(recipe => recipe.id === recipeId)
-  if (index > -1) {
-    favoriteRecipes.splice(index, 1)
-  }
-}
-
-const toggleBookmark = (recipe: Recipe): void => {
-  recipe.isBookmarked = !recipe.isBookmarked
-}
-
-const updateProfile = (): void => {
-  user.value.name = userSettings.name
-  user.value.email = userSettings.email
-  console.log('Profile updated:', userSettings)
-}
-
-const updateNotifications = (): void => {
-  console.log('Notifications updated:', userSettings)
-}
-
-const updatePrivacy = (): void => {
-  console.log('Privacy settings updated:', userSettings)
-}
-
-const changePlan = (): void => {
-  router.push('/pricing')
-}
-
-const generateStars = (rating: number): string => {
-  const fullStars = Math.floor(rating)
-  const hasHalfStar = rating % 1 >= 0.5
-  return '★'.repeat(fullStars) + (hasHalfStar ? '☆' : '')
-}
-
-const formatNumber = (num: number): string => {
+function formatNumber(num) {
   if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`
   if (num >= 1000) return `${(num / 1000).toFixed(1)}k`
   return num.toString()
 }
 
-const getDifficultyColor = (difficulty: string): string => {
+function generateStars(rating) {
+  const fullStars = Math.floor(rating)
+  const hasHalfStar = rating % 1 >= 0.5
+  return '★'.repeat(fullStars) + (hasHalfStar ? '☆' : '')
+}
+
+function getDifficultyColor(difficulty) {
   switch (difficulty) {
-    case 'Easy': return '#4ade80'
-    case 'Medium': return '#fbbf24'
-    case 'Hard': return '#ef4444'
+    case 'Easy': return '#13795b'
+    case 'Medium': return '#f59e0b'
+    case 'Hard': return '#dc2626'
     default: return '#6b7280'
   }
 }
 
-const getActivityIcon = (type: string): string => {
+function getActivityIcon(type) {
   switch (type) {
     case 'like': return '❤️'
     case 'comment': return '💬'
@@ -796,310 +618,146 @@ const getActivityIcon = (type: string): string => {
     default: return '📝'
   }
 }
-
-// Lifecycle
-onMounted(() => {
-  // Simulate real-time updates
-  setInterval(() => {
-    analytics.totalViews += Math.floor(Math.random() * 10)
-  }, 10000)
-})
 </script>
 
-<style
-
 <style scoped>
-.dashboard {
-    min-height: 100vh;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    padding: 2rem;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200;0,400;0,600;0,700;1,200;1,700&display=swap');
+
+.barista-dashboard {
+  min-height: 100vh;
+  background: #13795b;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: #fff;
 }
 
-/* Dashboard Header */
-.dashboard-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(20px);
-    border-radius: 20px;
-    padding: 2rem;
-    margin-bottom: 2rem;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+/* Hero Section */
+.hero-section {
+  position: relative;
+  padding: 4rem 2rem;
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)),
+    url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1200&h=400&fit=crop');
+  background-size: cover;
+  background-position: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.user-info {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
+.hero-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.hero-content {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
 }
 
 .user-avatar {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    border: 4px solid rgba(255, 255, 255, 0.3);
-    object-fit: cover;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  object-fit: cover;
 }
 
-.user-details {
-    color: white;
+.user-info {
+  flex: 1;
+  min-width: 250px;
 }
 
-.user-name {
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+.small-text {
+  font-size: 0.9rem;
+  text-transform: lowercase;
+  opacity: 0.9;
+  display: block;
+  margin-bottom: 0.5rem;
+  font-style: italic;
 }
 
-.user-subtitle {
-    font-size: 1.1rem;
-    opacity: 0.9;
-    margin-bottom: 1rem;
+.user-info h1 {
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hero-subtitle {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  margin-bottom: 1.5rem;
+}
+
+.hero-subtitle em {
+  font-style: italic;
 }
 
 .user-stats {
-    display: flex;
-    gap: 2rem;
+  display: flex;
+  gap: 2rem;
+  font-size: 0.9rem;
+  flex-wrap: wrap;
 }
 
-.stat {
-    font-size: 0.9rem;
-    opacity: 0.8;
+.hero-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
-.quick-actions {
-    display: flex;
-    gap: 1rem;
+.btn {
+  padding: 0.875rem 2rem;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+  border: none;
 }
 
-.action-btn {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 1rem 1.5rem;
-    border: none;
-    border-radius: 25px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
+.custom-btn {
+  background: #fff;
+  color: #13795b;
 }
 
-.action-btn.primary {
-    background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-    color: white;
+.custom-border-btn {
+  background: transparent;
+  border: 2px solid #fff;
+  color: #fff;
 }
 
-.action-btn.secondary {
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+.custom-btn:hover,
+.custom-border-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-.action-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+/* Navigation */
+.dashboard-nav {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 1rem 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(10px);
 }
 
-/* Navigation Tabs */
-.dashboard-tabs {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 2rem;
-    overflow-x: auto;
-    padding-bottom: 0.5rem;
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
 }
 
-.tab-btn {
-    padding: 1rem 2rem;
-    background: rgba(255, 255, 255, 0.1);
-    border: none;
-    border-radius: 25px;
-    color: white;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    white-space: nowrap;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.tab-btn:hover,
-.tab-btn.active {
-    background: rgba(255, 255, 255, 0.2);
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-}
-
-/* Dashboard Content */
-.dashboard-content {
-    animation: fadeIn 0.5s ease;
-}
-
-/* Overview Section */
-.analytics-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-}
-
-.analytics-card {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(20px);
-    border-radius: 15px;
-    padding: 1.5rem;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    transition: all 0.3s ease;
-}
-
-.analytics-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-}
-
-.card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-}
-
-.card-header h3 {
-    color: white;
-    font-size: 0.9rem;
-    opacity: 0.8;
-}
-
-.card-icon {
-    font-size: 1.5rem;
-}
-
-.card-value {
-    font-size: 2.5rem;
-    font-weight: bold;
-    color: white;
-    margin-bottom: 0.5rem;
-}
-
-.card-growth {
-    font-size: 0.8rem;
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-}
-
-.card-growth.positive {
-    color: #4ade80;
-}
-
-.overview-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 2rem;
-    margin-top: 2rem;
-}
-
-.activity-preview,
-.quick-stats {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(20px);
-    border-radius: 15px;
-    padding: 1.5rem;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.section-title {
-    color: white;
-    font-size: 1.3rem;
-    margin-bottom: 1.5rem;
-    font-weight: 600;
-}
-
-.activity-list {
-    space-y: 1rem;
-}
-
-.activity-item {
-    display: flex;
-    align-items: start;
-    gap: 1rem;
-    padding: 1rem 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.activity-item:last-child {
-    border-bottom: none;
-}
-
-.activity-icon {
-    font-size: 1.2rem;
-    width: 30px;
-    text-align: center;
-}
-
-.activity-content {
-    flex: 1;
-}
-
-.activity-message {
-    color: white;
-    font-size: 0.9rem;
-    margin-bottom: 0.3rem;
-}
-
-.activity-time {
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 0.8rem;
-}
-
-.view-all-btn {
-    width: 100%;
-    padding: 0.8rem;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
-    color: white;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-top: 1rem;
-}
-
-.view-all-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
-}
-
-.stats-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.stat-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.stat-label {
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 0.9rem;
-}
-
-.stat-value {
-    color: white;
-    font-weight: 600;
-}
-
-/* Recipes Section */
-.section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
-}
-
-.filter-btn {
-    background: rgba(255, 255, 255, 0.1);
+.nav-tab {
+  padding: 0.75rem 1.5rem;
+  background: transparent;
+  border: none;
+  border-radius: 50px;
+  color: #fff;
+  font-weight: 500;
+  cursor: pointer
 }
 </style>

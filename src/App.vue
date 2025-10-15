@@ -1,7 +1,7 @@
 <!-- App.vue -->
 <template>
   <div class="app-wrapper">
-    <Header />
+    <!-- <Header /> -->
     <main class="page-layout">
       <RouterView />
     </main>
@@ -94,41 +94,5 @@ body {
 </style>
 
 <style scoped>
-.app-wrapper {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background: var(--gradient-cool);
-  position: relative;
-}
 
-.app-wrapper::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: 
-    radial-gradient(circle at 20% 80%, rgba(254, 202, 87, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(255, 159, 243, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 40% 40%, rgba(78, 205, 196, 0.08) 0%, transparent 50%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-.page-layout {
-  flex: 1;
-  width: 100%;
-  min-height: calc(100vh - 140px);
-  padding: 2rem;
-  position: relative;
-  z-index: 1;
-}
-
-@media (max-width: 768px) {
-  .page-layout {
-    padding: 1rem;
-  }
-}
 </style>

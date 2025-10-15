@@ -1,296 +1,845 @@
 <template>
-  <div class="home-page">
-    <div class="hero-section">
-      <h1>Welcome to Delicious24Cooking 🍳</h1>
-      <p class="hero-description">Discover amazing recipes from around the world</p>
-    </div>
+  <main>
+    <nav class="navbar navbar-expand-lg">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="index.html">
+          <img src="/images/coffee-beans.png" class="navbar-brand-image img-fluid" alt="Barista Cafe Template">
+          Barista
+        </a>
 
-    <section class="section">
-      <h2>Top Rated Recipes</h2>
-      <div class="recipe-grid">
-        <div v-for="recipe in topRated" :key="recipe.id" class="recipe-card" @click="goToRecipe(recipe.id)">
-          <div class="image-container">
-            <img :src="recipe.main_image" :alt="recipe.name || 'Recipe Image'" />
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-lg-auto">
+            <li class="nav-item">
+              <a class="nav-link click-scroll" href="#section_1">Home</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link click-scroll" href="#section_2">About</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link click-scroll" href="#section_3">Our Menu</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link click-scroll" href="#section_4">Reviews</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link click-scroll" href="#section_5">Contact</a>
+            </li>
+          </ul>
+
+          <div class="ms-lg-3">
+            <a class="btn custom-btn custom-border-btn" href="reservation.html">
+              Reservation
+              <i class="bi-arrow-up-right ms-2"></i>
+            </a>
           </div>
-          <div class="card-content">
-            <h3>{{ recipe.name || 'Recipe #' + recipe.id }}</h3>
-            <div class="rating">
-              <span class="stars">{{ generateStars(Number(recipe.rating)) }}</span>
-              <span class="rating-number">{{ recipe.rating }}</span>
+        </div>
+      </div>
+    </nav>
+
+
+    <section class="hero-section d-flex justify-content-center align-items-center" id="section_1">
+
+      <div class="container">
+        <div class="row align-items-center">
+
+          <div class="col-lg-6 col-12 mx-auto">
+            <em class="small-text">welcome to Barista.co</em>
+
+            <h1>Cafe Klang</h1>
+
+            <p class="text-white mb-4 pb-lg-2">
+              your <em>favourite</em> coffee daily lives.
+            </p>
+
+            <a class="btn custom-btn custom-border-btn smoothscroll me-3" href="#section_2">
+              Our Story
+            </a>
+
+            <a class="btn custom-btn smoothscroll me-2 mb-2" href="#section_3"><strong>Check
+                Menu</strong></a>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="hero-slides"></div>
+    </section>
+
+
+    <section class="about-section section-padding" id="section_2">
+      <div class="section-overlay"></div>
+      <div class="container">
+        <div class="row align-items-center">
+
+          <div class="col-lg-6 col-12">
+            <div class="ratio ratio-1x1">
+              <video autoplay="" loop="" muted="" class="custom-video" poster="">
+                <source src="/videos/pexels-mike-jones-9046237.mp4" type="video/mp4">
+
+                Your browser does not support the video tag.
+              </video>
+
+              <div class="about-video-info d-flex flex-column">
+                <h4 class="mt-auto">We Started Since 2009.</h4>
+
+                <h4>Best Cafe in Klang.</h4>
+              </div>
             </div>
           </div>
+
+          <div class="col-lg-5 col-12 mt-4 mt-lg-0 mx-auto">
+            <em class="text-white">Barista.co</em>
+
+            <h2 class="text-white mb-3">Cafe KL</h2>
+
+            <p class="text-white">The café had been in the town for as long as anyone could remember, and it
+              had become a beloved institution among the locals.</p>
+
+            <p class="text-white">The café was run by a friendly and hospitable couple, Mr. and Mrs.
+              Johnson. Barista Cafe is free Bootstrap 5 HTML layout provided by <a rel="nofollow"
+                href="https://www.tooplate.com" target="_blank">Tooplate</a>.</p>
+
+            <a href="#barista-team" class="smoothscroll btn custom-btn custom-border-btn mt-3 mb-4">Meet
+              Baristas</a>
+          </div>
+
         </div>
       </div>
     </section>
 
-    <section class="section">
-      <h2>Recently Published Recipes</h2>
-      <div class="recipe-grid">
-        <div v-for="recipe in latest" :key="recipe.id" class="recipe-card" @click="goToRecipe(recipe.id)">
-          <div class="image-container">
-            <img :src="recipe.main_image" :alt="recipe.name || 'Recipe Image'" />
+
+    <section class="barista-section section-padding section-bg" id="barista-team">
+      <div class="container">
+        <div class="row justify-content-center">
+
+          <div class="col-lg-12 col-12 text-center mb-4 pb-lg-2">
+            <em class="text-white">Creative Baristas</em>
+
+            <h2 class="text-white">Meet People</h2>
           </div>
-          <div class="card-content">
-            <h3>{{ recipe.name || 'Recipe #' + recipe.id }}</h3>
-            <p class="publish-date">
-              Published: {{ formatDate(recipe.date_published) }}
+
+          <div class="col-lg-3 col-md-6 col-12 mb-4">
+            <div class="team-block-wrap">
+              <div class="team-block-info d-flex flex-column">
+                <div class="d-flex mt-auto mb-3">
+                  <h4 class="text-white mb-0">Steve</h4>
+
+                  <p class="badge ms-4"><em>Boss</em></p>
+                </div>
+
+                <p class="text-white mb-0">your favourite coffee daily lives tempor.</p>
+              </div>
+
+              <div class="team-block-image-wrap">
+                <img src="/images/team/portrait-elegant-old-man-wearing-suit.jpg" class="team-block-image img-fluid"
+                  alt="">
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6 col-12 mb-4">
+            <div class="team-block-wrap">
+              <div class="team-block-info d-flex flex-column">
+                <div class="d-flex mt-auto mb-3">
+                  <h4 class="text-white mb-0">Sandra</h4>
+
+                  <p class="badge ms-4"><em>Manager</em></p>
+                </div>
+
+                <p class="text-white mb-0">your favourite coffee daily lives.</p>
+              </div>
+
+              <div class="team-block-image-wrap">
+                <img
+                  src="/images/team/cute-korean-barista-girl-pouring-coffee-prepare-filter-batch-brew-pour-working-cafe.jpg"
+                  class="team-block-image img-fluid" alt="">
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6 col-12 mb-4">
+            <div class="team-block-wrap">
+              <div class="team-block-info d-flex flex-column">
+                <div class="d-flex mt-auto mb-3">
+                  <h4 class="text-white mb-0">Jackson</h4>
+
+                  <p class="badge ms-4"><em>Senior</em></p>
+                </div>
+
+                <p class="text-white mb-0">your favourite coffee daily lives.</p>
+              </div>
+
+              <div class="team-block-image-wrap">
+                <img src="/images/team/small-business-owner-drinking-coffee.jpg" class="team-block-image img-fluid"
+                  alt="">
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6 col-12">
+            <div class="team-block-wrap">
+              <div class="team-block-info d-flex flex-column">
+                <div class="d-flex mt-auto mb-3">
+                  <h4 class="text-white mb-0">Michelle</h4>
+
+                  <p class="badge ms-4"><em>Barista</em></p>
+                </div>
+
+                <p class="text-white mb-0">your favourite coffee daily consectetur.</p>
+              </div>
+
+              <div class="team-block-image-wrap">
+                <img src="/images/team/smiley-business-woman-working-cashier.jpg" class="team-block-image img-fluid"
+                  alt="">
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+
+    <section class="menu-section section-padding" id="section_3">
+      <div class="container">
+        <div class="row">
+
+          <div class="col-lg-6 col-12 mb-4 mb-lg-0">
+            <div class="menu-block-wrap">
+              <div class="text-center mb-4 pb-lg-2">
+                <em class="text-white">Delicious Menu</em>
+                <h4 class="text-white">Breakfast</h4>
+              </div>
+
+              <div class="menu-block">
+                <div class="d-flex">
+                  <h6>Pancakes</h6>
+
+                  <span class="underline"></span>
+
+                  <strong class="ms-auto">$12.50</strong>
+                </div>
+
+                <div class="border-top mt-2 pt-2">
+                  <small>Fresh brewed coffee and steamed milk</small>
+                </div>
+              </div>
+
+              <div class="menu-block my-4">
+                <div class="d-flex">
+                  <h6>
+                    Toasted Waffle
+                  </h6>
+
+                  <span class="underline"></span>
+
+                  <strong class="text-white ms-auto"><del>$16.50</del></strong>
+
+                  <strong class="ms-2">$12.00</strong>
+                </div>
+
+                <div class="border-top mt-2 pt-2">
+                  <small>Brewed coffee and steamed milk</small>
+                </div>
+              </div>
+
+              <div class="menu-block">
+                <div class="d-flex">
+                  <h6>Fried Chips
+                    <span class="badge ms-3">Recommend</span>
+                  </h6>
+
+                  <span class="underline"></span>
+
+                  <strong class="ms-auto">$15.0</strong>
+                </div>
+
+                <div class="border-top mt-2 pt-2">
+                  <small>Rich Milk and Foam</small>
+                </div>
+              </div>
+
+              <div class="menu-block my-4">
+                <div class="d-flex">
+                  <h6>Pancakes</h6>
+
+                  <span class="underline"></span>
+
+                  <strong class="ms-auto">$12.50</strong>
+                </div>
+
+                <div class="border-top mt-2 pt-2">
+                  <small>Fresh brewed coffee and steamed milk</small>
+                </div>
+              </div>
+
+              <div class="menu-block">
+                <div class="d-flex">
+                  <h6>Banana Cakes</h6>
+
+                  <span class="underline"></span>
+
+                  <strong class="ms-auto">$18.0</strong>
+                </div>
+
+                <div class="border-top mt-2 pt-2">
+                  <small>Rich Milk and Foam</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6 col-12">
+            <div class="menu-block-wrap">
+              <div class="text-center mb-4 pb-lg-2">
+                <em class="text-white">Favourite Menu</em>
+                <h4 class="text-white">Coffee</h4>
+              </div>
+
+              <div class="menu-block">
+                <div class="d-flex">
+                  <h6>Latte</h6>
+
+                  <span class="underline"></span>
+
+                  <strong class="text-white ms-auto"><del>$12.50</del></strong>
+
+                  <strong class="ms-2">$7.50</strong>
+                </div>
+
+                <div class="border-top mt-2 pt-2">
+                  <small>Fresh brewed coffee and steamed milk</small>
+                </div>
+              </div>
+
+              <div class="menu-block my-4">
+                <div class="d-flex">
+                  <h6>
+                    White Coffee
+                    <span class="badge ms-3">Recommend</span>
+                  </h6>
+
+                  <span class="underline"></span>
+
+                  <strong class="ms-auto">$5.90</strong>
+                </div>
+
+                <div class="border-top mt-2 pt-2">
+                  <small>Brewed coffee and steamed milk</small>
+                </div>
+              </div>
+
+              <div class="menu-block">
+                <div class="d-flex">
+                  <h6>Chocolate Milk</h6>
+
+                  <span class="underline"></span>
+
+                  <strong class="ms-auto">$5.50</strong>
+                </div>
+
+                <div class="border-top mt-2 pt-2">
+                  <small>Rich Milk and Foam</small>
+                </div>
+              </div>
+
+              <div class="menu-block my-4">
+                <div class="d-flex">
+                  <h6>Greentea</h6>
+
+                  <span class="underline"></span>
+
+                  <strong class="ms-auto">$7.50</strong>
+                </div>
+
+                <div class="border-top mt-2 pt-2">
+                  <small>Fresh brewed coffee and steamed milk</small>
+                </div>
+              </div>
+
+              <div class="menu-block">
+                <div class="d-flex">
+                  <h6>Dark Chocolate</h6>
+
+                  <span class="underline"></span>
+
+                  <strong class="ms-auto">$7.25</strong>
+                </div>
+
+                <div class="border-top mt-2 pt-2">
+                  <small>Rich Milk and Foam</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+
+    <section class="reviews-section section-padding section-bg" id="section_4">
+      <div class="container">
+        <div class="row justify-content-center">
+
+          <div class="col-lg-12 col-12 text-center mb-4 pb-lg-2">
+            <em class="text-white">Reviews by Customers</em>
+
+            <h2 class="text-white">Testimonials</h2>
+          </div>
+
+          <div class="timeline">
+            <div class="timeline-container timeline-container-left">
+              <div class="timeline-content">
+                <div class="reviews-block">
+                  <div class="reviews-block-image-wrap d-flex align-items-center">
+                    <img src="/images/reviews/young-woman-with-round-glasses-yellow-sweater.jpg"
+                      class="reviews-block-image img-fluid" alt="">
+
+                    <div class="">
+                      <h6 class="text-white mb-0">Sandra</h6>
+                      <em class="text-white"> Customers</em>
+                    </div>
+                  </div>
+
+                  <div class="reviews-block-info">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                      tempor incididunt ut labore et dolore magna aliqua.</p>
+
+                    <div class="d-flex border-top pt-3 mt-4">
+                      <strong class="text-white">4.5 <small class="ms-2">Rating</small></strong>
+
+                      <div class="reviews-group ms-auto">
+                        <i class="bi-star-fill"></i>
+                        <i class="bi-star-fill"></i>
+                        <i class="bi-star-fill"></i>
+                        <i class="bi-star-fill"></i>
+                        <i class="bi-star"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="timeline-container timeline-container-right">
+              <div class="timeline-content">
+                <div class="reviews-block">
+                  <div class="reviews-block-image-wrap d-flex align-items-center">
+                    <img src="/images/reviews/senior-man-white-sweater-eyeglasses.jpg"
+                      class="reviews-block-image img-fluid" alt="">
+
+                    <div class="">
+                      <h6 class="text-white mb-0">Don</h6>
+                      <em class="text-white"> Customers</em>
+                    </div>
+                  </div>
+
+                  <div class="reviews-block-info">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                      tempor incididunt ut labore et dolore magna aliqua.</p>
+
+                    <div class="d-flex border-top pt-3 mt-4">
+                      <strong class="text-white">4.5 <small class="ms-2">Rating</small></strong>
+
+                      <div class="reviews-group ms-auto">
+                        <i class="bi-star-fill"></i>
+                        <i class="bi-star-fill"></i>
+                        <i class="bi-star-fill"></i>
+                        <i class="bi-star-fill"></i>
+                        <i class="bi-star"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="timeline-container timeline-container-left">
+              <div class="timeline-content">
+                <div class="reviews-block">
+                  <div class="reviews-block-image-wrap d-flex align-items-center">
+                    <img
+                      src="/images/reviews/young-beautiful-woman-pink-warm-sweater-natural-look-smiling-portrait-isolated-long-hair.jpg"
+                      class="reviews-block-image img-fluid" alt="">
+
+                    <div class="">
+                      <h6 class="text-white mb-0">Olivia</h6>
+                      <em class="text-white"> Customers</em>
+                    </div>
+                  </div>
+
+                  <div class="reviews-block-info">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                      tempor incididunt ut labore et dolore magna aliqua.</p>
+
+                    <div class="d-flex border-top pt-3 mt-4">
+                      <strong class="text-white">4.5 <small class="ms-2">Rating</small></strong>
+
+                      <div class="reviews-group ms-auto">
+                        <i class="bi-star-fill"></i>
+                        <i class="bi-star-fill"></i>
+                        <i class="bi-star-fill"></i>
+                        <i class="bi-star-fill"></i>
+                        <i class="bi-star"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+
+    <section class="contact-section section-padding" id="section_5">
+      <div class="container">
+        <div class="row">
+
+          <div class="col-lg-12 col-12">
+            <em class="text-white">Say Hello</em>
+            <h2 class="text-white mb-4 pb-lg-2">Contact</h2>
+          </div>
+
+          <div class="col-lg-6 col-12">
+            <form action="#" method="post" class="custom-form contact-form" role="form">
+
+              <div class="row">
+
+                <div class="col-lg-6 col-12">
+                  <label for="name" class="form-label">Name <sup class="text-danger">*</sup></label>
+
+                  <input type="text" name="name" id="name" class="form-control" placeholder="Jackson" required="">
+                </div>
+
+                <div class="col-lg-6 col-12">
+                  <label for="email" class="form-label">Email Address</label>
+
+                  <input type="email" name="email" id="email" pattern="[^ @]*@[^ @]*" class="form-control"
+                    placeholder="Jack@gmail.com" required="">
+                </div>
+
+                <div class="col-12">
+                  <label for="message" class="form-label">How can we help?</label>
+
+                  <textarea name="message" rows="4" class="form-control" id="message" placeholder="Message"
+                    required=""></textarea>
+
+                </div>
+              </div>
+
+              <div class="col-lg-5 col-12 mx-auto mt-3">
+                <button type="submit" class="form-control">Send Message</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="col-lg-6 col-12 mx-auto mt-5 mt-lg-0 ps-lg-5">
+            <iframe class="google-map"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5039.668141741662!2d72.81814769288509!3d19.043340656729775!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c994f34a7355%3A0x2680d63a6f7e33c2!2sLover%20Point!5e1!3m2!1sen!2sth!4v1692722771770!5m2!1sen!2sth"
+              width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"></iframe>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+
+    <footer class="site-footer">
+      <div class="container">
+        <div class="row">
+
+          <div class="col-lg-4 col-12 me-auto">
+            <em class="text-white d-block mb-4">Where to find us?</em>
+
+            <strong class="text-white">
+              <i class="bi-geo-alt me-2"></i>
+              Bandra West, Mumbai, Maharashtra 400050, India
+            </strong>
+
+            <ul class="social-icon mt-4">
+              <li class="social-icon-item">
+                <a href="#" class="social-icon-link bi-facebook">
+                </a>
+              </li>
+
+              <li class="social-icon-item">
+                <a href="https://x.com/minthu" target="_new" class="social-icon-link bi-twitter">
+                </a>
+              </li>
+
+              <li class="social-icon-item">
+                <a href="#" class="social-icon-link bi-whatsapp">
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="col-lg-3 col-12 mt-4 mb-3 mt-lg-0 mb-lg-0">
+            <em class="text-white d-block mb-4">Contact</em>
+
+            <p class="d-flex mb-1">
+              <strong class="me-2">Phone:</strong>
+              <a href="tel: 305-240-9671" class="site-footer-link">
+                (65)
+                305 2409 671
+              </a>
+            </p>
+
+            <p class="d-flex">
+              <strong class="me-2">Email:</strong>
+
+              <a href="mailto:info@yourgmail.com" class="site-footer-link">
+                hello@barista.co
+              </a>
+            </p>
+          </div>
+
+
+          <div class="col-lg-5 col-12">
+            <em class="text-white d-block mb-4">Opening Hours.</em>
+
+            <ul class="opening-hours-list">
+              <li class="d-flex">
+                Monday - Friday
+                <span class="underline"></span>
+
+                <strong>9:00 - 18:00</strong>
+              </li>
+
+              <li class="d-flex">
+                Saturday
+                <span class="underline"></span>
+
+                <strong>11:00 - 16:30</strong>
+              </li>
+
+              <li class="d-flex">
+                Sunday
+                <span class="underline"></span>
+
+                <strong>Closed</strong>
+              </li>
+            </ul>
+          </div>
+
+          <div class="col-lg-8 col-12 mt-4">
+            <p class="copyright-text mb-0">Copyright © Barista Cafe 2048
+              - Design: <a rel="sponsored" href="https://www.tooplate.com" target="_blank">Tooplate</a>
             </p>
           </div>
         </div>
       </div>
-    </section>
-  </div>
+    </footer>
+  </main>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import { useRouter } from "vue-router";
+import { onMounted } from 'vue'
 
-interface Recipe {
-  id: number;
-  name?: string;
-  main_image: string;
-  rating: string;
-  date_published: string;
-}
-
-const router = useRouter();
-const topRated = ref<Recipe[]>([])
-const latest = ref<Recipe[]>([])
-
-const sampleData: Recipe[] = [
-  {
-    id: 1,
-    name: 'Bruschetta',
-    main_image: 'https://images.unsplash.com/photo-1572695157366-5e585ab2b69f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-    rating: "4.8",
-    date_published: "2025-09-15",
-  },
-  {
-    id: 2,
-    name: 'Stuffed Mushrooms',
-    main_image: 'https://cdn.apartmenttherapy.info/image/upload/f_jpg,q_auto:eco,c_fill,g_auto,w_1500,ar_1:1/k%2FPhoto%2FRecipes%2F2024-10-stuffed-mushrooms%2Fstuffed-mushrooms-318',
-    rating: "4.5",
-    date_published: "2025-09-20",
-  },
-  {
-    id: 3,
-    name: 'Caprese Skewers',
-    main_image: 'https://images.unsplash.com/photo-1592417817098-8fd3d9eb14a5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
-    rating: "4.9",
-    date_published: "2025-09-18",
-  },
-  {
-    id: 4,
-    name: 'Lemonade',
-    main_image: 'https://i2.wp.com/lmld.org/wp-content/uploads/2022/04/Lemonade-4.jpg',
-    rating: "4.7",
-    date_published: "2025-09-22",
-  },
-  {
-    id: 5,
-    name: 'Red Potato Salad',
-    main_image: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
-    rating: "4.6",
-    date_published: "2025-09-10",
-  },
-  {
-    id: 7,
-    name: 'Jalapeño Limeade',
-    main_image: 'https://jerryjamesstone.com/wp-content/uploads/2020/01/Jalapeno-Lemonade-with-Garnish-3.jpg',
-    rating: "5.0",
-    date_published: "2025-09-21",
-  },
-  {
-    id: 39,
-    name: 'Summer Corn Salad',
-    main_image: 'https://www.spendwithpennies.com/wp-content/uploads/2023/06/Fresh-Corn-Salad-SpendWithPennies-5.jpg',
-    rating: '4.4',
-    date_published: "2025-09-21",
-  },
-  {
-    id: 47,
-    name: 'Mexican Corn Salad',
-    main_image: 'https://www.jocooks.com/wp-content/uploads/2019/05/mexican-street-corn-salad-1-12.jpg',
-    rating: '4.5',
-    date_published: "2025-09-20",
-  },
-  {
-    id: 58,
-    name: 'Greek Salad',
-    main_image: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
-    rating: '4.5',
-    date_published: "2025-09-19",
-  },
-  {
-    id: 59,
-    name: 'Cobb Salad',
-    main_image: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
-    rating: '4.4',
-    date_published: "2025-08-21",
-  },
-]
-
-// Load sample data
 onMounted(() => {
-  // Top rated recipes
-  topRated.value = [...sampleData]
-    .sort((a, b) => Number(b.rating) - Number(a.rating))
-    .slice(0, 6);
+  // Wait until the component is mounted and the DOM exists
+  // Make sure jQuery and Vegas scripts are loaded in index.html
+  // in the correct order: jquery -> vegas -> custom.js
+  // Then you can initialize Vegas here:
 
-  // Latest published recipes
-  latest.value = [...sampleData]
-    .sort(
-      (a, b) =>
-        new Date(b.date_published).getTime() -
-        new Date(a.date_published).getTime()
-    )
-    .slice(0, 6)
+  if (window.$) {
+    const $ = window.$
+    $('.hero-slides').vegas({
+      slides: [
+        { src: '/images/slide1.jpg' },
+        { src: '/images/slide2.jpg' },
+        { src: '/images/slide3.jpg' }
+      ],
+      delay: 5000
+    })
+  }
 })
-
-const generateStars = (rating: number): string => {
-  const fullStars = Math.floor(rating);
-  const hasHalfStar = rating % 1 >= 0.5;
-  return "★".repeat(fullStars) + (hasHalfStar ? "☆" : "");
-};
-
-const formatDate = (dateString: string): string => {
-  return new Date(dateString).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
-};
-
-const goToRecipe = (recipeId: number) => {
-  router.push(`/recipe/${recipeId}`);
-}
 </script>
 
 <style scoped>
-.home-page {
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200;0,400;0,600;0,700;1,200;1,700&display=swap');
+
+.cafe-home {
+  min-height: 100vh;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: #fff;
+  background: #13795b;
+}
+
+/* Hero Section */
+.hero-section {
+  padding: 4rem 2rem;
+  background: linear-gradient(rgba(0, 0, 0, 0.3),
+      rgba(0, 0, 0, 0.5)),
+    url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1200&h=400&fit=crop');
+  background-size: cover;
+  background-position: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.hero-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem;
 }
 
-.hero-section {
-  text-align: center;
-  margin-bottom: 3rem;
-  padding: 2rem 0;
-}
-
-.hero-section h1 {
-  font-size: 2.5rem;
-  color: #1f2937;
-  margin-bottom: 1rem;
-}
-
-.hero-description {
-  font-size: 1.2rem;
-  color: #6b7280;
-  margin: 0;
-}
-
-.section {
-  margin-bottom: 3rem;
-}
-
-.section h2 {
-  font-size: 2rem;
-  color: #1f2937;
-  margin-bottom: 1.5rem;
-  padding-left: 1rem;
-  border-left: 4px solid #ff6347;
-}
-
-.recipe-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
-}
-
-.recipe-card {
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.recipe-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-}
-
-.image-container {
-  height: 200px;
-  overflow: hidden;
-}
-
-.recipe-card img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.3s ease;
-}
-
-.recipe-card:hover img {
-  transform: scale(1.05);
-}
-
-.card-content {
-  padding: 1.25rem;
-}
-
-.recipe-card h3 {
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin-bottom: 0.75rem;
-  color: #1f2937;
-  line-height: 1.4;
-}
-
-.rating {
+.hero-content {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
 }
 
-.stars {
-  color: #fbbf24;
-  font-size: 1.1rem;
+.hero-text {
+  max-width: 600px;
 }
 
-.rating-number {
-  color: #6b7280;
-  font-weight: 500;
-}
-
-.publish-date {
+.small-text {
   font-size: 0.9rem;
-  color: #6b7280;
-  margin: 0;
+  text-transform: lowercase;
+  opacity: 0.9;
+  display: block;
+  margin-bottom: 0.5rem;
+  font-style: italic;
 }
 
-@media (max-width: 768px) {
-  .home-page {
-    padding: 1rem;
-  }
+.hero-text h1 {
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
 
-  .hero-section h1 {
+.hero-subtitle {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  margin-bottom: 1.5rem;
+}
+
+.hero-subtitle em {
+  font-style: italic;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.hero-image img {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 16px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  object-fit: cover;
+}
+
+/* Buttons */
+.btn {
+  padding: 0.875rem 2rem;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+  border: none;
+}
+
+.custom-btn {
+  background: #fff;
+  color: #13795b;
+}
+
+.custom-border-btn {
+  background: transparent;
+  border: 2px solid #fff;
+  color: #fff;
+}
+
+.custom-btn:hover,
+.custom-border-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Info Section */
+.section-padding {
+  padding: 4rem 2rem;
+}
+
+.info-section {
+  background: #1f4732;
+  color: #fff;
+}
+
+.info-grid {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.info-card {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 2rem;
+  border-radius: 16px;
+  flex: 1 1 250px;
+  min-width: 250px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.info-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.info-card h3 {
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+}
+
+.info-card p {
+  opacity: 0.9;
+  font-size: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hero-text h1 {
     font-size: 2rem;
   }
 
-  .section h2 {
-    font-size: 1.5rem;
+  .hero-subtitle {
+    font-size: 1rem;
   }
 
-  .recipe-grid {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 1rem;
+  .hero-content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .hero-image img {
+    max-width: 90%;
+  }
+
+  .info-grid {
+    flex-direction: column;
+    gap: 1.5rem;
   }
 }
 </style>

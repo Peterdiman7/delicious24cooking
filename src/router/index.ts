@@ -1,4 +1,5 @@
 import AboutView from "@/views/AboutView.vue"
+import CancelSubscriptionView from "@/views/CancelSubscriptionView.vue"
 import CategoriesView from "@/views/CategoriesView.vue"
 import CategoryDetailsView from "@/views/CategoryDetailsView.vue"
 import ContactsView from "@/views/ContactsView.vue"
@@ -20,30 +21,76 @@ const createRouter = () => {
     const router = createVueRouter({
         history: createWebHistory(import.meta.env.BASE_URL),
         routes: [
-            { path: "/", name: "home", component: HomeView },
-            { path: "/categories", name: "categories", component: CategoriesView },
+            {
+                path: "/",
+                name: "home",
+                component: HomeView,
+            },
+            {
+                path: "/categories",
+                name: "categories",
+                component: CategoriesView,
+            },
             {
                 path: "/categories/:id",
                 name: "category-details",
                 component: CategoryDetailsView,
-                meta: { requiresAuth: true }
+                meta: { requiresAuth: true },
             },
             {
                 path: "/recipe/:id",
                 name: "recipe-detail",
                 component: RecipeDetailsView,
-                meta: { requiresAuth: true }
+                meta: { requiresAuth: true },
             },
-            { path: "/contacts", name: "contacts", component: ContactsView },
-            { path: "/privacy-policy", name: "privacy-policy", component: PrivacyPolicyView },
-            { path: "/terms-conditions", name: "terms-conditions", component: TermsConditionsView },
-            { path: "/about", name: "about", component: AboutView },
-            { path: "/cookies", name: "cookies", component: CookiesView },
-            { path: "/payment-plans", name: "payment-plans", component: PaymentPlansView },
-
-            // Guest-only routes
-            { path: "/login", name: "login", component: LoginView, meta: { requiresGuest: true } },
-            { path: "/register", name: "register", component: RegisterView, meta: { requiresGuest: true } },
+            {
+                path: "/contacts",
+                name: "contacts",
+                component: ContactsView,
+            },
+            {
+                path: "/privacy-policy",
+                name: "privacy-policy",
+                component: PrivacyPolicyView,
+            },
+            {
+                path: "/terms-conditions",
+                name: "terms-conditions",
+                component: TermsConditionsView,
+            },
+            {
+                path: "/about",
+                name: "about",
+                component: AboutView,
+            },
+            {
+                path: "/cookies",
+                name: "cookies",
+                component: CookiesView,
+            },
+            {
+                path: "/cancel-subscription",
+                name: "cancel-subscription",
+                component: CancelSubscriptionView,
+                meta: { requiresAuth: true },
+            },
+            {
+                path: "/payment-plans",
+                name: "payment-plans",
+                component: PaymentPlansView,
+            },
+            {
+                path: "/login",
+                name: "login",
+                component: LoginView,
+                meta: { requiresGuest: true },
+            },
+            {
+                path: "/register",
+                name: "register",
+                component: RegisterView,
+                meta: { requiresGuest: true },
+            },
         ],
     })
 

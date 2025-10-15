@@ -24,6 +24,7 @@
             <li><router-link to="/categories" class="footer-link">Categories</router-link></li>
             <li><router-link to="/about" class="footer-link">About Us</router-link></li>
             <li><router-link to="/contacts" class="footer-link">Contact</router-link></li>
+            <li><router-link to="/cancel-subscription" class="footer-link">Cancel Subscription</router-link></li>
           </ul>
         </div>
         <!-- Newsletter -->
